@@ -12,6 +12,15 @@
 #define ESTILO_SUBLINHADO 4
 #define ESTILO_REVERSO    7
 
+int jogadas[6][7] = {
+    {0, 0, 0, 0, 0, 0, 0},
+    {0, 0, 0, 0, 0, 0, 0},
+    {0, 0, 0, 0, 0, 0, 0},
+    {0, 0, 0, 0, 0, 0, 0},
+    {0, 0, 0, 0, 0, 0, 0},
+    {0, 0, 0, 0, 0, 0, 0}
+};
+
 struct Jogador {
     char nome[128];
     int cor;
@@ -125,6 +134,7 @@ struct Jogador jogador(char *tit, int corEscolhida){
     //param corEscolhida: se outro usuario ja tiver escolhido uma cor é possivel bloquear essa cor para nao haver duplica
 
     int tamCores = sizeof(cores)/sizeof(cores[0]);//numero de cores da lista
+    int escolhaCor = 0;
 
     int tam = sizeof(tit)-1;
     struct Jogador jogador;
@@ -140,7 +150,7 @@ struct Jogador jogador(char *tit, int corEscolhida){
 
     for(int i = 0; i < tamCores; i++){ 
         //laco que imprimira as cores disponiveis
-        if(i+1 == corEscolhida){
+        if(cores[i] == corEscolhida){
             //caso a cor atual ja tenha sido escolhida imprimira "1-X" para indicar
             printf("%d-X", i+1);
             printf(" ");
@@ -161,15 +171,93 @@ struct Jogador jogador(char *tit, int corEscolhida){
     printf("\n");
 
     printf("Selecione a cor do jogador: ");
-    scanf("%d", &jogador.cor);//captura a cor escolhida pelo usuario
+    scanf("%d", &escolhaCor);//captura a cor escolhida pelo usuario
 
-    while(!(jogador.cor >= 1 && jogador.cor <= tamCores) || jogador.cor == corEscolhida){ 
+    switch (escolhaCor)
+    {
+    case 1:
+        jogador.cor = VERMELHO;
+        break;
+
+    case 2:
+        jogador.cor = VERDE;
+        break;
+
+    case 3:
+        jogador.cor = AMARELO;
+        break;
+
+    case 4:
+        jogador.cor = AZUL;
+        break;
+    
+    default:
+        break;
+    }
+
+    while(!(escolhaCor >= 1 && escolhaCor <= tamCores) || jogador.cor == corEscolhida){ 
         //caso a opcao seja invalida ou a cor ja tenha sido escolhida pergunta de novo ao usuario
         printf("Opcao invalida, selecione uma opcao valida: ");
-        scanf("%d", &jogador.cor);
+        scanf("%d", &escolhaCor);
+
+        switch (escolhaCor)
+        {
+        case 1:
+            jogador.cor = VERMELHO;
+            break;
+
+        case 2:
+            jogador.cor = VERDE;
+            break;
+
+        case 3:
+            jogador.cor = AMARELO;
+            break;
+
+        case 4:
+            jogador.cor = AZUL;
+            break;
+        
+        default:
+            break;
+        }
     }
 
     return jogador; //retorna a struct Jogador com os dados
+}
+
+void printVez(struct Jogador jogador1, struct Jogador jogador2, int vez){
+    resetarCor();
+
+    titulo("Vez da Jogada:", 14, 4);
+
+    if(vez==1){
+        moverCursor(6, 20);
+        mudarEstilo(ESTILO_REVERSO, ESTILO_NEGRITO);
+
+        mudarEstilo(ESTILO_REVERSO, jogador1.cor);
+        printf("%s", jogador1.nome);
+
+        moverCursor(6, 60);
+        mudarEstilo(ESTILO_RESET, 0);
+        printf("%s", jogador2.nome);
+    }else{
+        moverCursor(6, 20);
+
+        printf("%s", jogador1.nome);
+
+        moverCursor(6, 60);
+        mudarEstilo(ESTILO_REVERSO, ESTILO_NEGRITO);
+        mudarEstilo(ESTILO_REVERSO, jogador2.cor);
+        printf("%s", jogador2.nome);
+    }
+    
+    printf("\n");
+    resetarCor();
+};
+
+void modoJogadorJogador(struct Jogador jogador1, struct Jogador jogador2){
+    printVez(jogador1, jogador2, 1);
 }
 
 int main(){ //programa principal
@@ -188,6 +276,10 @@ int main(){ //programa principal
         jogador1 = jogador("JOGADOR1", 0); //captura o primeiro jogador
         limparTela();
         jogador2 = jogador("JOGADOR2", jogador1.cor); //captura o segundo jogador
+
+        limparTela();
+
+        modoJogadorJogador(jogador1, jogador2);
     }
     
 }
