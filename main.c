@@ -1,0 +1,193 @@
+#include <stdio.h>
+
+#define PRETO    30
+#define VERMELHO 31
+#define VERDE    32
+#define AMARELO  33
+#define AZUL     34
+#define BRANCO   37
+
+#define ESTILO_RESET      0
+#define ESTILO_NEGRITO    1
+#define ESTILO_SUBLINHADO 4
+#define ESTILO_REVERSO    7
+
+struct Jogador {
+    char nome[128];
+    int cor;
+};
+
+char escolhasMenu[4][24] = {
+    "Jogador vs Jogador",
+    "Jogador vs Computador",
+    "Computador vs Computador",
+    "Sair do Jogo"
+};
+
+int cores[] = {
+    VERMELHO,
+    VERDE,
+    AMARELO,
+    AZUL
+};
+
+void resetarCor() {
+    // imprime uma sequencia para retornar a cor original
+    printf("\033[0m");
+}
+
+void mudarEstilo(int estilo,int cor){
+    // imprime uma sequencia de estilo e cor
+
+    printf("\033[%d;%dm", estilo, cor);
+}
+
+void moverCursor(int linha, int coluna) {
+    //move o cursor para a linha e coluna desejada
+
+    printf("\033[%d;%dH", linha, coluna);
+}
+
+void titulo(char *tit, int tam, int lin){
+    //imprime um titulo na linha desejada
+    //o tamanho é usado para calcular o centro da tela
+    int coluna = (80-tam)/2;
+
+    moverCursor(lin, coluna);
+
+    printf("\033[%d;%dm", ESTILO_REVERSO, ESTILO_NEGRITO);
+    printf("%s\n", tit);
+    printf("\n");
+    resetarCor();
+}
+
+void limparTela(){
+    //limpa a tela e escreve o titulo do jogo
+    printf("\033[H\033[J");
+    titulo("LIGUE4", 6, 2);
+};
+
+void printMenuInicial(){
+    //escreve o menu inicial na tela
+    int linhaInicial = 5; 
+    int colunaInicial = (80-26)/2;
+    int tamLista = sizeof(escolhasMenu) / sizeof(escolhasMenu[0]);
+    int quantLinhas = tamLista + 2; //quantidade total de linhas do menu(items da lista + topo e fim)
+
+    for(int l = 0; l < quantLinhas; l++){ //cada linha do menu
+        moverCursor(linhaInicial+l, colunaInicial);// move o cursor para a linha atual e coluna
+
+        if(l == 0 || l == (quantLinhas-1)){
+            //se for a primeira ou ultima linha imprime a linha padrao
+            printf(" ----------------------------\n");
+        }else{
+            //imprime a linha de cada item com o numero de opcao no inicio
+            printf("| %d.", l); 
+
+            for(int k = 0; k < 24; k++){
+                //percorre cada carac da string
+                if(escolhasMenu[l-1][k] != '\0'){
+                    printf("%c", escolhasMenu[l-1][k]); //imprime o carac
+                }else{
+                    printf(" "); //quando é vazio imprime um carac vazio para poder completar a linha
+                }
+            }
+            printf(" |\n");//finaliza a linha dessa opcao
+        }
+    }
+
+
+    printf("\n");
+}
+
+int menuInicial(){
+    //funcao responsavel por chamar a funcao que imprime e por capturar a escolha do usuario
+
+    int escolha = 0;
+    int tamLista = sizeof(escolhasMenu) / sizeof(escolhasMenu[0]);
+        
+    printMenuInicial();//imprime o menu
+
+    printf("Digite o numero da sua escolha: ");
+    scanf("%d", &escolha);//captura a escolha do usuario
+
+    while(!(escolha >= 1 && escolha <= tamLista)){ //caso a escolha nao esteja de acordo pede pro usuario repetir ate que alguma valida seja selecionada
+        printf("Opcao errada, digite novamente: ");
+        scanf("%d", &escolha);
+    }
+
+    return escolha;//retorna a escolha para o programa principal
+}
+
+struct Jogador jogador(char *tit, int corEscolhida){
+    //funcao que captura escolhas do usuario relacionadas aos jogadores e retorna uma struct Jogador
+    //param tit: nome que devera ser usado como subtitulo e em perguntas
+    //param corEscolhida: se outro usuario ja tiver escolhido uma cor é possivel bloquear essa cor para nao haver duplica
+
+    int tamCores = sizeof(cores)/sizeof(cores[0]);//numero de cores da lista
+
+    int tam = sizeof(tit)-1;
+    struct Jogador jogador;
+
+    titulo(tit, tam, 4);//escreve o subtitulo
+    
+    printf("Digite o nome do %s: ", tit);
+    scanf("%s", jogador.nome);//recebe o nome do jogador
+
+    limparTela();
+    titulo(tit, tam, 4);
+    //limpa a tela para a proxima pergunta e reescreve o subtitulo
+
+    for(int i = 0; i < tamCores; i++){ 
+        //laco que imprimira as cores disponiveis
+        if(i+1 == corEscolhida){
+            //caso a cor atual ja tenha sido escolhida imprimira "1-X" para indicar
+            printf("%d-X", i+1);
+            printf(" ");
+        }else{
+            //imprime a cor junto com o seu numero para ser escolhida
+
+            printf("%d-", i+1);//imprime o numero da cor
+
+            mudarEstilo(ESTILO_REVERSO, cores[i]);
+            printf(" ");
+            //muda o terminal para a cor atual e imprime um espaco vazio para mostra-la
+
+            resetarCor();
+            printf(" ");
+            //volta o terminal para a cor normal e imprime um espaco para separa as cores
+        }
+    }
+    printf("\n");
+
+    printf("Selecione a cor do jogador: ");
+    scanf("%d", &jogador.cor);//captura a cor escolhida pelo usuario
+
+    while(!(jogador.cor >= 1 && jogador.cor <= tamCores) || jogador.cor == corEscolhida){ 
+        //caso a opcao seja invalida ou a cor ja tenha sido escolhida pergunta de novo ao usuario
+        printf("Opcao invalida, selecione uma opcao valida: ");
+        scanf("%d", &jogador.cor);
+    }
+
+    return jogador; //retorna a struct Jogador com os dados
+}
+
+int main(){ //programa principal
+    struct Jogador jogador1;
+    struct Jogador jogador2;
+
+    limparTela();
+
+    int escolha = menuInicial();//chama o menu inicial e salva a escolha do usuario
+
+    limparTela();
+
+    if(escolha == 1){
+        //se o usuario escolheu o modo jogador vs jogador
+
+        jogador1 = jogador("JOGADOR1", 0); //captura o primeiro jogador
+        limparTela();
+        jogador2 = jogador("JOGADOR2", jogador1.cor); //captura o segundo jogador
+    }
+    
+}
