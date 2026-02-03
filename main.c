@@ -6,6 +6,8 @@
 #define AMARELO  33
 #define AZUL     34
 #define BRANCO   37
+#define MAGENTA  35
+#define CIANO    36
 
 #define ESTILO_RESET      0
 #define ESTILO_NEGRITO    1
@@ -13,12 +15,12 @@
 #define ESTILO_REVERSO    7
 
 int jogadas[6][7] = {
-    {0, 0, 0, 0, 0, 0, 0},
-    {0, 0, 0, 0, 0, 0, 0},
-    {0, 0, 0, 0, 0, 0, 0},
-    {0, 0, 0, 0, 0, 0, 0},
-    {0, 0, 0, 0, 0, 0, 0},
-    {0, 0, 0, 0, 0, 0, 0}
+    {1, 0, 1, 0, 0, 0, 0},
+    {0, 0, 0, 0, 0, 2, 0},
+    {0, 0, 1, 0, 1, 0, 0},
+    {0, 0, 2, 2, 0, 1, 0},
+    {0, 0, 0, 2, 0, 0, 0},
+    {0, 0, 2, 0, 0, 1, 0}
 };
 
 struct Jogador {
@@ -37,7 +39,9 @@ int cores[] = {
     VERMELHO,
     VERDE,
     AMARELO,
-    AZUL
+    AZUL,
+    MAGENTA,
+    CIANO
 };
 
 void resetarCor() {
@@ -190,6 +194,14 @@ struct Jogador jogador(char *tit, int corEscolhida){
     case 4:
         jogador.cor = AZUL;
         break;
+
+    case 5:
+        jogador.cor = MAGENTA;
+        break;
+
+    case 6:
+        jogador.cor = CIANO;
+        break;
     
     default:
         break;
@@ -256,8 +268,79 @@ void printVez(struct Jogador jogador1, struct Jogador jogador2, int vez){
     resetarCor();
 };
 
+void printTabela(struct Jogador jogador1, struct Jogador jogador2){
+    int linhaInic = 9;
+    int colunInic = 27;
+
+    
+
+    for(int l = 0; l < 6; l++){
+        moverCursor(linhaInic, colunInic);
+        for(int c = 0; c < 7; c++){
+            switch (jogadas[l][c]){
+                case 1:
+                    if(c == 6){
+                        mudarEstilo(ESTILO_REVERSO, jogador1.cor);
+                        printf("  ");
+                        resetarCor();
+                    }else{
+                        mudarEstilo(ESTILO_REVERSO, jogador1.cor);
+                        printf("  ");
+                        resetarCor();
+                        mudarEstilo(ESTILO_REVERSO, PRETO);
+                        printf("  ");
+                    }
+                    break;
+                    
+                case 2:
+                    if(c == 6){
+                        mudarEstilo(ESTILO_REVERSO, jogador2.cor);
+                        printf("  ");
+                        resetarCor();
+                    }else{
+                        mudarEstilo(ESTILO_REVERSO, jogador2.cor);
+                        printf("  ");
+                        resetarCor();
+                        mudarEstilo(ESTILO_REVERSO, PRETO);
+                        printf("  ");
+                    }
+
+                    break;
+
+                default:
+                    if(c == 6){
+                        mudarEstilo(ESTILO_REVERSO, BRANCO);
+                        printf("  ");
+                        resetarCor();
+                    }else{
+                        mudarEstilo(ESTILO_REVERSO, BRANCO);
+                        printf("  ");
+                        resetarCor();
+                        mudarEstilo(ESTILO_REVERSO, PRETO);
+                        printf("  ");
+                    }
+                    
+                    break;
+            }
+        }
+        
+        if(l != 5){
+            moverCursor(linhaInic+1, colunInic);
+            mudarEstilo(ESTILO_REVERSO, PRETO);
+            printf("                          ");
+            resetarCor();
+        }
+
+        linhaInic = linhaInic + 2;
+    }
+
+    printf("\n");
+}
+
 void modoJogadorJogador(struct Jogador jogador1, struct Jogador jogador2){
     printVez(jogador1, jogador2, 1);
+
+    printTabela(jogador1, jogador2);
 }
 
 int main(){ //programa principal
