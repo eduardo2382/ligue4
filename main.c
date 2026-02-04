@@ -22,11 +22,11 @@ int jogadas[6][7] = {
     {0, 0, 0, 0, 0, 0, 0},
     {0, 0, 0, 0, 0, 0, 0}
 };
-
-struct Jogador {
+//Modificação utilizando typedef para deixar o codigo mais limpo.
+typedef struct{
     char nome[128];
     int cor;
-};
+} Jogador;
 
 char escolhasMenu[4][24] = {
     "Jogador vs Jogador",
@@ -132,7 +132,7 @@ int menuInicial(){
     return escolha;//retorna a escolha para o programa principal
 }
 
-struct Jogador jogador(char *tit, int corEscolhida){
+Jogador jogador(char *tit, int corEscolhida){
     //funcao que captura escolhas do usuario relacionadas aos jogadores e retorna uma struct Jogador
     //param tit: nome que devera ser usado como subtitulo e em perguntas
     //param corEscolhida: se outro usuario ja tiver escolhido uma cor é possivel bloquear essa cor para nao haver duplica
@@ -141,7 +141,7 @@ struct Jogador jogador(char *tit, int corEscolhida){
     int escolhaCor = 0;
 
     int tam = sizeof(tit)-1;
-    struct Jogador jogador;
+    Jogador jogador;
 
     titulo(tit, tam, 4);//escreve o subtitulo
     
@@ -160,18 +160,21 @@ struct Jogador jogador(char *tit, int corEscolhida){
             printf(" ");
         }else{
             //imprime a cor junto com o seu numero para ser escolhida
-
+            
             printf("%d-", i+1);//imprime o numero da cor
-
+    
             mudarEstilo(ESTILO_REVERSO, cores[i]);
             printf(" ");
             //muda o terminal para a cor atual e imprime um espaco vazio para mostra-la
-
+    
             resetarCor();
             printf(" ");
             //volta o terminal para a cor normal e imprime um espaco para separa as cores
+
         }
-    }
+
+        }
+    
     printf("\n");
 
     printf("Selecione a cor do jogador: ");
@@ -238,7 +241,7 @@ struct Jogador jogador(char *tit, int corEscolhida){
     return jogador; //retorna a struct Jogador com os dados
 }
 
-void printVez(struct Jogador jogador1, struct Jogador jogador2, int vez){
+void printVez( Jogador jogador1, Jogador jogador2, int vez){
     resetarCor();
 
     titulo("Vez da Jogada:", 14, 4);
@@ -268,7 +271,7 @@ void printVez(struct Jogador jogador1, struct Jogador jogador2, int vez){
     resetarCor();
 };
 
-void printTabela(struct Jogador jogador1, struct Jogador jogador2){
+void printTabela( Jogador jogador1, Jogador jogador2){
     int linhaInic = 9;
     int colunInic = 27;
 
@@ -368,12 +371,12 @@ void capturarJogada(int vez){
 
     while(!(atualizarTabela(vez, (coluna-1)))){
         moverCursor(21, 2);
-        printf("Coluna cheia, selecione outra coluna");
+        printf("Coluna cheia, selecione outra coluna: ");
         scanf("%d", &coluna);
     }
 }
 
-void modoJogadorJogador(struct Jogador jogador1, struct Jogador jogador2){
+void modoJogadorJogador( Jogador jogador1,  Jogador jogador2){
     int vez = 1;
     
     while(1){
@@ -396,16 +399,17 @@ void modoJogadorJogador(struct Jogador jogador1, struct Jogador jogador2){
 }
 
 int main(){ //programa principal
-    struct Jogador jogador1;
-    struct Jogador jogador2;
+     Jogador jogador1;
+     Jogador jogador2;
 
     limparTela();
 
     int escolha = menuInicial();//chama o menu inicial e salva a escolha do usuario
 
     limparTela();
-
-    if(escolha == 1){
+//Uma adaptação melhor do que if, else
+    switch (escolha){
+        case 1:
         //se o usuario escolheu o modo jogador vs jogador
 
         jogador1 = jogador("JOGADOR1", 0); //captura o primeiro jogador
@@ -415,6 +419,7 @@ int main(){ //programa principal
         limparTela();
 
         modoJogadorJogador(jogador1, jogador2);
+        break;
     }
     
 }
