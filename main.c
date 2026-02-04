@@ -15,12 +15,12 @@
 #define ESTILO_REVERSO    7
 
 int jogadas[6][7] = {
-    {1, 0, 1, 0, 0, 0, 0},
-    {0, 0, 0, 0, 0, 2, 0},
-    {0, 0, 1, 0, 1, 0, 0},
-    {0, 0, 2, 2, 0, 1, 0},
-    {0, 0, 0, 2, 0, 0, 0},
-    {0, 0, 2, 0, 0, 1, 0}
+    {0, 0, 0, 0, 0, 0, 0},
+    {0, 0, 0, 0, 0, 0, 0},
+    {0, 0, 0, 0, 0, 0, 0},
+    {0, 0, 0, 0, 0, 0, 0},
+    {0, 0, 0, 0, 0, 0, 0},
+    {0, 0, 0, 0, 0, 0, 0}
 };
 
 struct Jogador {
@@ -337,10 +337,62 @@ void printTabela(struct Jogador jogador1, struct Jogador jogador2){
     printf("\n");
 }
 
-void modoJogadorJogador(struct Jogador jogador1, struct Jogador jogador2){
-    printVez(jogador1, jogador2, 1);
+int atualizarTabela(int vez, int coluna){
+    for(int l = 0; l < 6; l++){
+        if(jogadas[l][coluna] != 0){
+            return 0;
+        }
 
-    printTabela(jogador1, jogador2);
+        if(l==5 || jogadas[l+1][coluna] != 0){
+            jogadas[l][coluna] = vez;
+            return 1;
+        }
+    }
+}
+
+void capturarJogada(int vez){
+    int coluna = 0;
+
+    moverCursor(21, 2);
+
+    printf("Escolha uma coluna de 1 a 7: ");
+    scanf("%d", &coluna);
+
+    while (!(coluna >= 1 && coluna <= 7)){
+        moverCursor(21, 2);
+
+        printf("Opcao errada! Escolha uma coluna de 1 a 7: ");
+        scanf("%d", &coluna);
+    }
+    
+
+    while(!(atualizarTabela(vez, (coluna-1)))){
+        moverCursor(21, 2);
+        printf("Coluna cheia, selecione outra coluna");
+        scanf("%d", &coluna);
+    }
+}
+
+void modoJogadorJogador(struct Jogador jogador1, struct Jogador jogador2){
+    int vez = 1;
+    
+    while(1){
+        printVez(jogador1, jogador2, vez);
+
+        printTabela(jogador1, jogador2);
+
+        capturarJogada(vez);
+
+        printTabela(jogador1, jogador2);
+
+        if(vez == 1 ){
+            vez=2;
+        }else{
+            vez=1;
+        }
+
+        limparTela();
+    }
 }
 
 int main(){ //programa principal
