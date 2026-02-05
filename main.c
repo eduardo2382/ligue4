@@ -457,6 +457,133 @@ int analisarColunas(){
     return 0;
 };
 
+int analisarDiagonal(){
+    //declarando as linhas e colunas.
+    int n = 6;
+    int m = 7;
+    //loop de leitura(leitura da direção principal da matriz, parte alta):
+    for(int coluna = 0; coluna < m; coluna++){
+        int i = 0;
+        int j = coluna;
+        int aux1 = 0;
+        int aux2 = 0;
+
+        while(i < n && j < m){
+            if(jogadas[i][j] == 1){
+                aux1++;
+                aux2 = 0;
+            }else if(jogadas[i][j] == 2){
+                aux2++;
+                aux1 = 0;
+            } else{
+                aux1 = 0;
+                aux2 = 0;
+            }
+
+            if(aux1 == 4){
+                return 1;
+            }
+            if(aux2 == 4){
+                return 2;
+            }
+
+            i++;
+            j++;
+        }
+    }
+    //lopping que analisa a parte baixa(na mesma direção da anterior, no caso tirando o celula (0,0))
+    for(int linha = 0; linha < n; linha++){
+        int i = linha;
+        int j = 0;
+        int aux1 = 0;
+        int aux2 = 0;
+
+        while(i < n && j < m){
+             if(jogadas[i][j] == 1){
+                aux1++;
+                aux2 = 0;
+            }else if(jogadas[i][j] == 2){
+                aux2++;
+                aux1 = 0;
+            } else{
+                aux1 = 0;
+                aux2 = 0;
+            }
+
+            if(aux1 == 4){
+                return 1;
+            }
+            if(aux2 == 4){
+                return 2;
+            }
+            
+            i++;
+            j++;
+        }
+    }
+//Analisando as diagonais de forma espelhada:
+    for(int coluna = 0; coluna < m; coluna++){
+        int i = 0;
+        int j = coluna;
+        int aux1 = 0;
+        int aux2 = 0;
+
+        while(i < n && j >= 0){
+           if(jogadas[i][j] == 1){
+                aux1++;
+                aux2 = 0;
+            }else if(jogadas[i][j] == 2){
+                aux2++;
+                aux1 = 0;
+            } else{
+                aux1 = 0;
+                aux2 = 0;
+            }
+
+            if(aux1 == 4){
+                return 1;
+            }
+            if(aux2 == 4){
+                return 2;
+            }
+
+            i++;
+            j--;
+        }
+    }
+    //loop espelhado
+    for(int linha = 0; linha < n; linha++){
+        int i = linha; 
+        int j = m - 1;
+        int aux1 = 0;
+        int aux2 = 0;
+
+        while(i < n && j >= 0){
+              if(jogadas[i][j] == 1){
+                aux1++;
+                aux2 = 0;
+            }else if(jogadas[i][j] == 2){
+                aux2++;
+                aux1 = 0;
+            } else{
+                aux1 = 0;
+                aux2 = 0;
+            }
+
+            if(aux1 == 4){
+                return 1;
+            }
+            if(aux2 == 4){
+                return 2;
+            }
+            
+            i++;
+            j--;
+        }
+    }
+    
+}
+
 int analisarEmpate(){
     for(int l = 0; l < 6; l++){
         for(int c = 0; c < 7; c++){
@@ -470,6 +597,15 @@ int analisarEmpate(){
 }
 
 int analisarTabela(){
+    switch(analisarDiagonal()){
+        case 1:
+            return 1;
+            break;
+        case 2:
+            return 2;
+            break;
+    }
+
     switch (analisarLinhas()){
         case 1:
             return 1;
