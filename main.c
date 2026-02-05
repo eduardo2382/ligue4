@@ -22,6 +22,7 @@ int jogadas[6][7] = {
     {0, 0, 0, 0, 0, 0, 0},
     {0, 0, 0, 0, 0, 0, 0}
 };
+
 //Modificação utilizando typedef para deixar o codigo mais limpo.
 typedef struct{
     char nome[128];
@@ -353,40 +354,112 @@ int atualizarTabela(int vez, int coluna){
     }
 }
 
-void capturarJogada(int vez){
-    int coluna = 0;
+void capturarJogada(int vez, int col){
+    if(!col){
+        int coluna = 0;
 
-    moverCursor(21, 2);
-
-    printf("Escolha uma coluna de 1 a 7: ");
-    scanf("%d", &coluna);
-
-    while (!(coluna >= 1 && coluna <= 7)){
         moverCursor(21, 2);
 
-        printf("Opcao errada! Escolha uma coluna de 1 a 7: ");
+        printf("Escolha uma coluna de 1 a 7: ");
         scanf("%d", &coluna);
-    }
-    
 
-    while(!(atualizarTabela(vez, (coluna-1)))){
-        moverCursor(21, 2);
-        printf("Coluna cheia, selecione outra coluna: ");
-        scanf("%d", &coluna);
+        while (!(coluna >= 1 && coluna <= 7)){
+            moverCursor(21, 2);
+
+            printf("Opcao errada! Escolha uma coluna de 1 a 7: ");
+            scanf("%d", &coluna);
+        }
+        
+
+        while(!(atualizarTabela(vez, (coluna-1)))){
+            moverCursor(21, 2);
+            printf("Coluna cheia, selecione outra coluna: ");
+            scanf("%d", &coluna);
+        }
+    }else{
+
     }
 }
 
-void modoJogadorJogador( Jogador jogador1,  Jogador jogador2){
+int analisarLinhas(){
+    for(int l = 0; l < 6; l++){ 
+        //percorre as linhas da matriz
+
+        int primeiroElem = 0;
+        //inicializa o contador de elementos
+
+        for(int c = 0; c < 4; c++){
+            //percorre as colunas da matrz
+
+            for(int i = c; i <= c+3; i++){
+                //percorre uma janela de 4 elementos a partir da coluna atual
+
+                if(i==c){//se for o primeiro elemento
+                    if(jogadas[l][i] == 0){ 
+                        //se for o primeiro elemento e for igual a 0 ja quebra o laco e desliza a janela
+                        break;
+                    }else{
+                        primeiroElem = jogadas[l][i];
+                        //se nao for igual a 0 define o valor parametro como o elemento atual
+                    }
+
+                }else if(i == c+3 && jogadas[l][i] == primeiroElem){
+                    //se estiver no ultimo elemento da janela significa que todos os outros foram iguais ao primeiro
+                    //se esse tambem for, quebra a funcao e retorna o que foi igual
+                    return primeiroElem;
+
+                }else if(jogadas[l][i] != primeiroElem){
+                    //se o elemento atual for diferente do primeiro quebra o laco e desliza a janela
+                    break;
+                }
+                
+            }
+        }
+    }
+};
+
+int analisarTabela(){
+    int vencedor = analisarLinhas();
+
+    if(vencedor){
+        return vencedor;
+    }else{
+        return 0;
+    }
+}
+
+void modoJogadorJogador(Jogador jogador1,  Jogador jogador2){
     int vez = 1;
     
     while(1){
+        int vencedor = 0;
+
         printVez(jogador1, jogador2, vez);
 
         printTabela(jogador1, jogador2);
 
-        capturarJogada(vez);
+        capturarJogada(vez, 0);
 
         printTabela(jogador1, jogador2);
+
+        vencedor = analisarTabela();
+
+        if(vencedor){
+            moverCursor(21, 2);
+            
+            switch (vencedor)
+            {
+            case 1:
+                printf("Jogo terminou! Vencedor: %s\n", jogador1.nome);
+                break;
+            
+            case 2:
+                printf("Jogo terminou! Vencedor: %s\n", jogador2.nome);
+                break;
+            }
+            
+            break;
+        }
 
         if(vez == 1 ){
             vez=2;
@@ -399,15 +472,16 @@ void modoJogadorJogador( Jogador jogador1,  Jogador jogador2){
 }
 
 int main(){ //programa principal
-     Jogador jogador1;
-     Jogador jogador2;
+    Jogador jogador1;
+    Jogador jogador2;
 
     limparTela();
 
     int escolha = menuInicial();//chama o menu inicial e salva a escolha do usuario
 
     limparTela();
-//Uma adaptação melhor do que if, else
+
+    //Uma adaptação melhor do que if, else
     switch (escolha){
         case 1:
         //se o usuario escolheu o modo jogador vs jogador
