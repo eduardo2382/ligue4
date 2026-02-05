@@ -376,8 +376,6 @@ void capturarJogada(int vez, int col){
             printf("Coluna cheia, selecione outra coluna: ");
             scanf("%d", &coluna);
         }
-    }else{
-
     }
 }
 
@@ -416,6 +414,8 @@ int analisarLinhas(){
             }
         }
     }
+
+    return 0;
 };
 
 int analisarColunas(){
@@ -440,7 +440,7 @@ int analisarColunas(){
                         //se nao for igual a 0 define o valor parametro como o elemento atual
                     }
 
-                }else if(i == c+3 && jogadas[i][c] == primeiroElem){
+                }else if(i == l+3 && jogadas[i][c] == primeiroElem){
                     //se estiver no ultimo elemento da janela significa que todos os outros foram iguais ao primeiro
                     //se esse tambem for, quebra a funcao e retorna o que foi igual
                     return primeiroElem;
@@ -453,17 +453,31 @@ int analisarColunas(){
             }
         }
     }
+
+    return 0;
 };
+
+int analisarEmpate(){
+    for(int l = 0; l < 6; l++){
+        for(int c = 0; c < 7; c++){
+            if(jogadas[l][c] == 0){
+                return 0;
+            }
+        }
+    }
+
+    return 1;
+}
 
 int analisarTabela(){
     switch (analisarLinhas()){
-    case 1:
-        return 1;
-        break;
-    
-    case 2:
-        return 2;
-        break;
+        case 1:
+            return 1;
+            break;
+        
+        case 2:
+            return 2;
+            break;
     }
 
     switch (analisarColunas()){
@@ -474,6 +488,12 @@ int analisarTabela(){
     case 2:
         return 2;
         break;
+    }
+
+    switch (analisarEmpate()){
+        case 1:
+            return 3;
+            break;
     }
 }
 
@@ -496,15 +516,18 @@ void modoJogadorJogador(Jogador jogador1,  Jogador jogador2){
         if(vencedor){
             moverCursor(21, 2);
             
-            switch (vencedor)
-            {
-            case 1:
-                printf("Jogo terminou! Vencedor: %s\n", jogador1.nome);
-                break;
-            
-            case 2:
-                printf("Jogo terminou! Vencedor: %s\n", jogador2.nome);
-                break;
+            switch (vencedor){
+                case 1:
+                    printf("Jogo terminou! Vencedor: %s\n", jogador1.nome);
+                    break;
+                
+                case 2:
+                    printf("Jogo terminou! Vencedor: %s\n", jogador2.nome);
+                    break;
+
+                case 3:
+                    printf("Jogo terminou! Empate!\n");
+                    break;
             }
             
             break;
@@ -533,16 +556,16 @@ int main(){ //programa principal
     //Uma adaptação melhor do que if, else
     switch (escolha){
         case 1:
-        //se o usuario escolheu o modo jogador vs jogador
+            //se o usuario escolheu o modo jogador vs jogador
 
-        jogador1 = jogador("JOGADOR1", 0); //captura o primeiro jogador
-        limparTela();
-        jogador2 = jogador("JOGADOR2", jogador1.cor); //captura o segundo jogador
+            jogador1 = jogador("JOGADOR1", 0); //captura o primeiro jogador
+            limparTela();
+            jogador2 = jogador("JOGADOR2", jogador1.cor); //captura o segundo jogador
 
-        limparTela();
+            limparTela();
 
-        modoJogadorJogador(jogador1, jogador2);
-        break;
+            modoJogadorJogador(jogador1, jogador2);
+            break;
     }
     
 }
