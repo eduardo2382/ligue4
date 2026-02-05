@@ -418,13 +418,62 @@ int analisarLinhas(){
     }
 };
 
-int analisarTabela(){
-    int vencedor = analisarLinhas();
+int analisarColunas(){
+    for(int c = 0; c < 7; c++){ 
+        //percorre as colunas da matriz
 
-    if(vencedor){
-        return vencedor;
-    }else{
-        return 0;
+        int primeiroElem = 0;
+        //inicializa o contador de elementos
+
+        for(int l = 0; l < 3; l++){
+            //percorre as linhas da matrz
+
+            for(int i = l; i <= l+3; i++){
+                //percorre uma janela de 4 elementos a partir da linha atual
+
+                if(i==l){//se for o primeiro elemento
+                    if(jogadas[i][c] == 0){ 
+                        //se for o primeiro elemento e for igual a 0 ja quebra o laco e desliza a janela
+                        break;
+                    }else{
+                        primeiroElem = jogadas[i][c];
+                        //se nao for igual a 0 define o valor parametro como o elemento atual
+                    }
+
+                }else if(i == c+3 && jogadas[i][c] == primeiroElem){
+                    //se estiver no ultimo elemento da janela significa que todos os outros foram iguais ao primeiro
+                    //se esse tambem for, quebra a funcao e retorna o que foi igual
+                    return primeiroElem;
+
+                }else if(jogadas[i][c] != primeiroElem){
+                    //se o elemento atual for diferente do primeiro quebra o laco e desliza a janela
+                    break;
+                }
+                
+            }
+        }
+    }
+};
+
+int analisarTabela(){
+    switch (analisarLinhas()){
+    case 1:
+        return 1;
+        break;
+    
+    case 2:
+        return 2;
+        break;
+    }
+
+    switch (analisarColunas()){
+    case 1:
+        return 1;
+        break;
+    
+    case 2:
+        return 2;
+        break;
     }
 }
 
