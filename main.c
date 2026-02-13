@@ -77,7 +77,7 @@ void titulo(char *tit, int tam, int lin){
 
 void limparTela(){
     //limpa a tela e escreve o titulo do jogo
-    printf("\033[H\033[J");
+    printf("\033[2J");
     titulo("LIGUE4", 6, 2);
 };
 
@@ -122,12 +122,15 @@ int menuInicial(){
         
     printMenuInicial();//imprime o menu
 
-    printf("Digite o numero da sua escolha: ");
-    scanf("%d", &escolha);//captura a escolha do usuario
+    moverCursor(12, 2);
 
-    while(!(escolha >= 1 && escolha <= tamLista)){ //caso a escolha nao esteja de acordo pede pro usuario repetir ate que alguma valida seja selecionada
+    printf("Digite o numero da sua escolha: ");
+    while(!(scanf("%d", &escolha)) || !(escolha >= 1 && escolha <= tamLista)){ //caso a escolha nao esteja de acordo pede pro usuario repetir ate que alguma valida seja selecionada
+        moverCursor(12, 2);
+        printf("\033[2K"); // codigo ansii para limpar a linha
+        scanf("%*[^\n]"); // codigo para descartar a linha bugada
         printf("Opcao errada, digite novamente: ");
-        scanf("%d", &escolha);
+        
     }
 
     return escolha;//retorna a escolha para o programa principal
@@ -361,13 +364,12 @@ void capturarJogada(int vez, int col){
         moverCursor(21, 2);
 
         printf("Escolha uma coluna de 1 a 7: ");
-        scanf("%d", &coluna);
 
-        while (!(coluna >= 1 && coluna <= 7)){
+        while (!(scanf("%d", &coluna)) || !(coluna >= 1 && coluna <= 7)){
             moverCursor(21, 2);
-
+            printf("\033[2K"); // codigo ansii para limpar a linha
+            scanf("%*[^\n]"); // codigo para descartar a linha bugada
             printf("Opcao errada! Escolha uma coluna de 1 a 7: ");
-            scanf("%d", &coluna);
         }
         
 
