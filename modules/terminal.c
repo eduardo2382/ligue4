@@ -1,4 +1,5 @@
 #include "terminal.h"
+#include <stdio.h>
 
 void resetarCor() {
     // imprime uma sequencia para retornar a cor original
