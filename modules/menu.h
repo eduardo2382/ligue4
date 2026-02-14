@@ -3,5 +3,7 @@
 
 void printMenuInicial();
 int menuInicial();
+void printMenuComputador();
+int menuComputador();
 
 #endif

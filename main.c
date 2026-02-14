@@ -256,6 +256,10 @@ void modoJogadorJogador(){
     }
 }
 
+void modoComputadorJogador(){
+    int nivel = menuComputador();
+}
+
 int main(){ //programa principal
     Jogador jogador1;
     Jogador jogador2;
@@ -272,6 +276,12 @@ int main(){ //programa principal
             //se o usuario escolheu o modo jogador vs jogador
 
             modoJogadorJogador();
+            break;
+
+        case 2:
+            //se o usuario escolheu o modo computador vs jogador
+
+            modoComputadorJogador();
             break;
     }
     
