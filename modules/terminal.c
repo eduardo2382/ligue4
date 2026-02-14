@@ -36,3 +36,8 @@ void limparTela(){
     printf("\033[2J");
     titulo("LIGUE4", 6, 2);
 }
+
+void limparLinha(int linha){
+    moverCursor(linha, 0);
+    printf("\033[2K"); // codigo ansii para limpar a linha
+}

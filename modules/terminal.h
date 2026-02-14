@@ -11,5 +11,6 @@ void resetarCor();
 void moverCursor(int linha, int coluna);
 void titulo(char *tit, int tam, int lin);
 void limparTela();
+void limparLinha(int linha);
 
 #endif
