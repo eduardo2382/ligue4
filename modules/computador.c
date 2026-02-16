@@ -47,5 +47,19 @@ int jogadaMedia(){
         }
         tentativa++;
     }
-    return jogadaFacil();
+    return 0;
+}
+
+int jogadaDificil(){
+    //Análise de jogada
+    //prioridade do modo dificil será defender(com isso é possivel utilizar o nivel medio) para depois atacar:
+    //Analisando se posui algo para defender:
+    int horizontal = analiseCompHorizontal();
+    int vertical = analiseCompVertical();
+    int diagonal = analiseCompDiagonal();
+    if(horizontal || vertical || diagonal){
+        jogadaMedia();
+        return 1;
+    }
+    //Analise da jogada dificil:
 }

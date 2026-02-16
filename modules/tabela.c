@@ -550,3 +550,12 @@ int analiseCompDiagonal() {
     
     return -1;  // Nenhuma ameaça diagonal
 }
+
+//funções de ataque:
+int analiseAtaqueVertical(){
+    for(int l = 0; l < 6; l++){
+        for(int c = 0; c < 4; c++){
+            
+        }
+    }
+}
