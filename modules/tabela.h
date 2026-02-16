@@ -22,5 +22,7 @@ int analisarColunas();
 int analisarDiagonal();
 int analisarEmpate();
 int analisarTabela();
-
+int analiseCompHorizontal();
+int analiseCompVertical();
+int analiseCompDiagonal();
 #endif

@@ -4,12 +4,48 @@
 #include <stdlib.h>
 #include <time.h>
 
-void jogadaFacil(){
+int jogadaFacil(){
     srand(time(NULL));
-    int numCol = (rand() % 6)+1;
+    int numCol = (rand() % 7) + 1;
 
     while(!(capturarJogada(2, numCol))){
-        numCol = (rand() % 6)+1;
+        numCol = (rand() % 7) + 1;
     }
+    return 1;
 }
 
+int jogadaMedia(){
+    //Entrada das respostas:
+    int horizontal = analiseCompHorizontal();
+    int vertical = analiseCompVertical();
+    int diagonal = analiseCompDiagonal();
+
+    //analise da jogada
+    //ambas as possibilidades dão negativa.
+    if(horizontal == -1 && vertical == -1 && diagonal == -1){
+        return jogadaFacil();
+    }
+    //alguma das possibilidades da True
+    int qq = 0;
+    int aux[3];
+    if(horizontal != -1){
+        aux[qq++] = horizontal;
+    }
+    if(vertical != -1){
+        aux[qq++] = vertical;
+    }
+    if(diagonal != -1){
+        aux[qq++] = diagonal;
+    }
+
+    int tentativa = 0;
+    int maxTentativa = 5;
+    while(tentativa < maxTentativa){
+        int i = rand() % qq;
+        if(capturarJogada(2,aux[i] + 1)){
+            return 1;
+        }
+        tentativa++;
+    }
+    return jogadaFacil();
+}

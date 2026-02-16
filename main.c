@@ -276,14 +276,22 @@ void modoComputadorJogador(){
                 capturarJogada(1, 0);
                 break;
         
-            case 2:
-                switch (nivel){
-                    case 1:
-                        jogadaFacil();                    
-                        break;
-                    
+            case 2:{
+                    int comp = 0;
+                    switch (nivel){
+                        case 1:
+                            comp = jogadaFacil();
+                            break;
+                        case 2:
+                            comp = jogadaMedia();
+                            break;
+                    }
+                    if(!comp){
+                        // Garante que o computador não pule a jogada para o jogador(gambiarra pq o computador não estava jogndo em alguns momentos)
+                        jogadaFacil();
                 }
                 break;
+            }
         }
 
         printTabela(jogador1.cor, computador.cor);

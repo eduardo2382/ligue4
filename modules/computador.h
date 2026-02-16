@@ -1,6 +1,7 @@
 #ifndef COMPUTADOR_H
 #define COMPUTADOR_H
 
-void jogadaFacil();
+int jogadaFacil();
+int jogadaMedia();
 
 #endif

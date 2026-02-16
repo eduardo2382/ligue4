@@ -33,8 +33,9 @@ int capturarJogada(int vez, int col){
 
         return 1;
     }else{
-        if(!atualizarTabela(vez, col)){
+        if(!atualizarTabela(vez, col-1)){
             return 0;
         }
+        return 1;
     }
 }
