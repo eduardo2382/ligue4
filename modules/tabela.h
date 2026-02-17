@@ -25,4 +25,6 @@ int analisarTabela();
 int analiseCompHorizontal();
 int analiseCompVertical();
 int analiseCompDiagonal();
+int analiseAtaqueVertical();
+int analiseAtaqueHorizontal();
 #endif

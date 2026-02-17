@@ -553,9 +553,61 @@ int analiseCompDiagonal() {
 
 //funções de ataque:
 int analiseAtaqueVertical(){
-    for(int l = 0; l < 6; l++){
-        for(int c = 0; c < 4; c++){
-            
+    for(int c = 0; c < 7; c++){
+        int aux = 0;
+        for(int l = 5; l >= 0; l--){
+            if(jogadas[l][c] == 2){
+                aux++;
+            }else{
+                aux = 0;
+            }
+            if(aux == 3 && l != 0 && jogadas[l-1][c] == 0){
+                return c;
+            }
         }
     }
+    return -1;
+}
+
+int analiseAtaqueHorizontal(){
+ //Leitura da direita para esquerda:
+    for(int i = 5; i >= 0; i--){
+        int aux = 0;
+        for(int j = 0; j < 7; j++){
+            //Analise de jogada:
+            if(aux == 2 && jogadas[i][j+1] == 2 && jogadas[i][j] == 0 && j != 6){
+                return j; 
+            }
+            //Analise da linha:
+            if(jogadas[i][j] == 2){
+                aux++;
+            }else{
+                aux = 0;
+            }
+            if(aux == 3 && jogadas[i][j+1] == 0 && j != 6){
+                return j + 1;
+            }
+        }
+    }
+
+    //leitura da esquerda para direita:
+    for(int i = 5; i >= 0; i--){
+        int aux = 0;
+        for(int j = 6; j >= 0; j--){
+            //analise da jogada
+            if(aux == 2 && jogadas[i][j - 1] == 2 && jogadas[i][j] == 0 && j != 0){
+                return j;
+            }
+            //avaliação:
+            if(jogadas[i][j] == 2){
+                aux++;
+            }else{
+                aux = 0;
+            }
+            if(aux == 3 && jogadas[i][j-1] == 0 && j != 0){
+                return j - 1;
+            }
+        }
+    }
+    return -1;
 }
