@@ -54,14 +54,18 @@ int jogadaDificil(){
     //a prioridade vai ser o ataque, caso n haja ataque ele defende, caso n tenha nenhum dos dois ele faz uma jogada aleatoria:
     int ataqueH = analiseAtaqueHorizontal();
     int ataqueV = analiseAtaqueVertical();
+    int ataqueD = analiseAtaqueDiagonal();
     //analise e a jogada do ataque!
-    if(ataqueH == -1 && ataqueV == -1){
+    if(ataqueH == -1 && ataqueV == -1 && ataqueD == -1){
         jogadaMedia();
         return 1;
     }
     
     int qq = 0;
     int aux[3];
+    if(ataqueD != -1){
+        aux[qq++] = ataqueD;
+    }
     if(ataqueH != -1){
         aux[qq++] = ataqueH;
     }

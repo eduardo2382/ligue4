@@ -408,36 +408,32 @@ int analiseCompVertical(){
 int analiseCompDiagonal() {
     int n = 6;
     int m = 7;
-    
-    // ===== DIAGONAIS PRINCIPAIS (\) =====
-    // Parte superior (começando na primeira linha)
     for(int coluna = 0; coluna < m; coluna++){
         int i = 0;
         int j = coluna;
-        int auxJogador = 0;  // Contador para peças do jogador (1)
+        int aux = 0;  
         
         while(i < n && j < m){
             if(jogadas[i][j] == 1){
-                auxJogador++;
+                aux++;
                 
                 // Encontrou 3 peças do jogador
-                if(auxJogador == 3){
-                    // Verifica se pode bloquear antes
+                if(aux == 3){
                     int ant_i = i - 3;
                     int ant_j = j - 3;
                     if(ant_i >= 0 && ant_j >= 0 && jogadas[ant_i][ant_j] == 0){
-                        return ant_j;  // Bloqueia no início
+                        return ant_j;
                     }
                     
                     // Verifica se pode bloquear depois
                     int prox_i = i + 1;
                     int prox_j = j + 1;
                     if(prox_i < n && prox_j < m && jogadas[prox_i][prox_j] == 0){
-                        return prox_j;  // Bloqueia no final
+                        return prox_j;
                     }
                 }
             } else {
-                auxJogador = 0;  // Reset se encontrar peça do PC ou vazio
+                aux = 0;
             }
             
             i++;
@@ -449,13 +445,13 @@ int analiseCompDiagonal() {
     for(int linha = 1; linha < n; linha++){
         int i = linha;
         int j = 0;
-        int auxJogador = 0;
+        int aux = 0;
         
         while(i < n && j < m){
             if(jogadas[i][j] == 1){
-                auxJogador++;
+                aux++;
                 
-                if(auxJogador == 3){
+                if(aux == 3){
                     // Verifica início
                     int ant_i = i - 3;
                     int ant_j = j - 3;
@@ -471,7 +467,7 @@ int analiseCompDiagonal() {
                     }
                 }
             } else {
-                auxJogador = 0;
+                aux = 0;
             }
             
             i++;
@@ -484,13 +480,13 @@ int analiseCompDiagonal() {
     for(int coluna = 0; coluna < m; coluna++){
         int i = 0;
         int j = coluna;
-        int auxJogador = 0;
+        int aux = 0;
         
         while(i < n && j >= 0){
             if(jogadas[i][j] == 1){
-                auxJogador++;
+                aux++;
                 
-                if(auxJogador == 3){
+                if(aux == 3){
                     // Verifica início (direita superior)
                     int ant_i = i - 3;
                     int ant_j = j + 3;
@@ -506,7 +502,7 @@ int analiseCompDiagonal() {
                     }
                 }
             } else {
-                auxJogador = 0;
+                aux = 0;
             }
             
             i++;
@@ -518,13 +514,13 @@ int analiseCompDiagonal() {
     for(int linha = 1; linha < n; linha++){
         int i = linha;
         int j = m - 1;
-        int auxJogador = 0;
+        int aux = 0;
         
         while(i < n && j >= 0){
             if(jogadas[i][j] == 1){
-                auxJogador++;
+                aux++;
                 
-                if(auxJogador == 3){
+                if(aux == 3){
                     // Verifica início (direita superior)
                     int ant_i = i - 3;
                     int ant_j = j + 3;
@@ -540,7 +536,7 @@ int analiseCompDiagonal() {
                     }
                 }
             } else {
-                auxJogador = 0;
+                aux = 0;
             }
             
             i++;
@@ -548,7 +544,7 @@ int analiseCompDiagonal() {
         }
     }
     
-    return -1;  // Nenhuma ameaça diagonal
+    return -1; 
 }
 
 //funções de ataque:
@@ -568,7 +564,6 @@ int analiseAtaqueVertical(){
     }
     return -1;
 }
-
 int analiseAtaqueHorizontal(){
  //Leitura da direita para esquerda:
     for(int i = 5; i >= 0; i--){
@@ -610,4 +605,143 @@ int analiseAtaqueHorizontal(){
         }
     }
     return -1;
+}
+int analiseAtaqueDiagonal(){
+    int n = 6;
+    int m = 7;
+    for(int coluna = 0; coluna < m; coluna++){
+        int i = 0;
+        int j = coluna;
+        int aux = 0;  
+        
+        while(i < n && j < m){
+            if(jogadas[i][j] == 2){
+                aux++;
+                
+                // Encontrou 3 peças do jogador
+                if(aux == 3){
+                    int ant_i = i - 3;
+                    int ant_j = j - 3;
+                    if(ant_i >= 0 && ant_j >= 0 && jogadas[ant_i][ant_j] == 0){
+                        return ant_j;
+                    }
+                    
+                    // Verifica se pode bloquear depois
+                    int prox_i = i + 1;
+                    int prox_j = j + 1;
+                    if(prox_i < n && prox_j < m && jogadas[prox_i][prox_j] == 0){
+                        return prox_j;
+                    }
+                }
+            } else {
+                aux = 0;
+            }
+            
+            i++;
+            j++;
+        }
+    }
+    
+    // Parte inferior 
+    for(int linha = 1; linha < n; linha++){
+        int i = linha;
+        int j = 0;
+        int aux = 0;
+        
+        while(i < n && j < m){
+            if(jogadas[i][j] == 2){
+                aux++;
+                
+                if(aux == 3){
+                    // Verifica início
+                    int ant_i = i - 3;
+                    int ant_j = j - 3;
+                    if(ant_i >= 0 && ant_j >= 0 && jogadas[ant_i][ant_j] == 0){
+                        return ant_j;
+                    }
+                    
+                    // Verifica final
+                    int prox_i = i + 1;
+                    int prox_j = j + 1;
+                    if(prox_i < n && prox_j < m && jogadas[prox_i][prox_j] == 0){
+                        return prox_j;
+                    }
+                }
+            } else {
+                aux = 0;
+            }
+            
+            i++;
+            j++;
+        }
+    }
+    
+    for(int coluna = 0; coluna < m; coluna++){
+        int i = 0;
+        int j = coluna;
+        int aux = 0;
+        
+        while(i < n && j >= 0){
+            if(jogadas[i][j] == 2){
+                aux++;
+                
+                if(aux == 3){
+                    // Verifica início (direita superior)
+                    int ant_i = i - 3;
+                    int ant_j = j + 3;
+                    if(ant_i >= 0 && ant_j < m && jogadas[ant_i][ant_j] == 0){
+                        return ant_j;
+                    }
+                    
+                    // Verifica final (esquerda inferior)
+                    int prox_i = i + 1;
+                    int prox_j = j - 1;
+                    if(prox_i < n && prox_j >= 0 && jogadas[prox_i][prox_j] == 0){
+                        return prox_j;
+                    }
+                }
+            } else {
+                aux = 0;
+            }
+            
+            i++;
+            j--;
+        }
+    }
+    
+    // Parte inferior (começando na última coluna)
+    for(int linha = 1; linha < n; linha++){
+        int i = linha;
+        int j = m - 1;
+        int aux = 0;
+        
+        while(i < n && j >= 0){
+            if(jogadas[i][j] == 2){
+                aux++;
+                
+                if(aux == 3){
+                    // Verifica início (direita superior)
+                    int ant_i = i - 3;
+                    int ant_j = j + 3;
+                    if(ant_i >= 0 && ant_j < m && jogadas[ant_i][ant_j] == 0){
+                        return ant_j;
+                    }
+                    
+                    // Verifica final (esquerda inferior)
+                    int prox_i = i + 1;
+                    int prox_j = j - 1;
+                    if(prox_i < n && prox_j >= 0 && jogadas[prox_i][prox_j] == 0){
+                        return prox_j;
+                    }
+                }
+            } else {
+                aux = 0;
+            }
+            
+            i++;
+            j--;
+        }
+    }
+    
+    return -1; 
 }

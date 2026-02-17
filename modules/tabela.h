@@ -27,4 +27,5 @@ int analiseCompVertical();
 int analiseCompDiagonal();
 int analiseAtaqueVertical();
 int analiseAtaqueHorizontal();
+int analiseAtaqueDiagonal();
 #endif
