@@ -285,10 +285,10 @@ void modoComputadorJogador(){
                             comp = jogadaFacil();
                             break;
                         case 2:
-                            comp = jogadaMedia();
+                            comp = jogadaMedia(2);
                             break;
                         case 3:
-                            comp = jogadaDificil();
+                            comp = jogadaDificil(2);
                     }
                     if(!comp){
                         // Garante que o computador não pule a jogada para o jogador(gambiarra pq o computador não estava jogndo em alguns momentos)
@@ -379,27 +379,44 @@ void modoComputadorComputador(){
         printTabela(computador1.cor, computador2.cor);
 
         switch (vez){
-            case 1:
+            case 1:{
+                int flag = 0;
                 // jogada do computador1
                 switch(nivelComp1){
                     case 1:
-                        break;
+                    flag = jogadaFacil();
+                    break;
                     case 2:
-                        break;
+                    flag = jogadaMedia(1);
+                    break;
                     case 3:
-                        break;
+                    flag = jogadaDificil(1);
+                    break;
+                }
+                if(!flag){
+                    jogadaFacil();
                 }
                 break;
-        
-            case 2:
+                
+            }
+            case 2:{
+                //joada do computador dois
+                int flag = 0;
                 switch(nivelComp2){
                     case 1:
-                        break;
+                    flag = jogadaFacil();
+                    break;
                     case 2:
-                        break;
+                    flag = jogadaMedia(2);
+                    break;
                     case 3:
-                        break;
+                    flag = jogadaDificil(2);
+                    break;
                 }
+                if(!flag){
+                    jogadaFacil();
+                }
+            }
                 break;
         }
 
@@ -449,7 +466,7 @@ void modoComputadorComputador(){
         }
 
         limparTela();
-    }
+    } 
 }
 
 int main(){ //programa principal

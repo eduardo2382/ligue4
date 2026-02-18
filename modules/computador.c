@@ -14,11 +14,11 @@ int jogadaFacil(){
     return 1;
 }
 
-int jogadaMedia(){
+int jogadaMedia(int vez){
     //Entrada das respostas:
-    int horizontal = analiseCompHorizontal();
-    int vertical = analiseCompVertical();
-    int diagonal = analiseCompDiagonal();
+    int horizontal = analiseCompHorizontal(vez);
+    int vertical = analiseCompVertical(vez);
+    int diagonal = analiseCompDiagonal(vez);
 
     //analise da jogada
     //ambas as possibilidades dão negativa.
@@ -50,14 +50,14 @@ int jogadaMedia(){
     return 0;
 }
 
-int jogadaDificil(){
+int jogadaDificil(int vez){
     //a prioridade vai ser o ataque, caso n haja ataque ele defende, caso n tenha nenhum dos dois ele faz uma jogada aleatoria:
-    int ataqueH = analiseAtaqueHorizontal();
-    int ataqueV = analiseAtaqueVertical();
-    int ataqueD = analiseAtaqueDiagonal();
+    int ataqueH = analiseAtaqueHorizontal(vez);
+    int ataqueV = analiseAtaqueVertical(vez);
+    int ataqueD = analiseAtaqueDiagonal(vez);
     //analise e a jogada do ataque!
     if(ataqueH == -1 && ataqueV == -1 && ataqueD == -1){
-        jogadaMedia();
+        jogadaMedia(vez);
         return 1;
     }
     
