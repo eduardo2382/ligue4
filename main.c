@@ -379,10 +379,25 @@ void modoComputadorComputador(){
         switch (vez){
             case 1:
                 // jogada do computador1
+                switch(nivelComp1){
+                    case 1:
+                        break;
+                    case 2:
+                        break;
+                    case 3:
+                        break;
+                }
                 break;
         
             case 2:
-                // jogada do computador2
+                switch(nivelComp2){
+                    case 1:
+                        break;
+                    case 2:
+                        break;
+                    case 3:
+                        break;
+                }
                 break;
         }
 
