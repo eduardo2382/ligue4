@@ -71,10 +71,8 @@ int menuInicial(){
 }
 
 void printMenuComputador(){
-    limparTela();
-
     //escreve o menu dos niveis na tela
-    int linhaInicial = 5; 
+    int linhaInicial = 6; 
     int colunaInicial = (80-20)/2;
     int tamLista = sizeof(escolhasMenuComp) / sizeof(escolhasMenuComp[0]);
     int quantLinhas = tamLista + 2; //quantidade total de linhas do menu(items da lista + topo e fim)
@@ -108,14 +106,12 @@ void printMenuComputador(){
 int menuComputador(){
     //funcao responsavel por chamar a funcao que imprime e por capturar a escolha do usuario
 
-    printf("ola");
-
     int escolha = 0;
     int tamLista = sizeof(escolhasMenuComp) / sizeof(escolhasMenuComp[0]);
         
     printMenuComputador();//imprime o menu
 
-    moverCursor(12, 2);
+    moverCursor(13, 2);
 
     printf("Digite o numero da sua escolha: ");
     while(!(scanf("%d", &escolha)) || !(escolha >= 1 && escolha <= tamLista)){ //caso a escolha nao esteja de acordo pede pro usuario repetir ate que alguma valida seja selecionada

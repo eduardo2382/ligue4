@@ -150,6 +150,8 @@ void printVez( Jogador jogador1, Jogador jogador2, int vez){
 
     titulo("Vez da Jogada:", 14, 4);
 
+    limparLinha(6);
+
     if(vez==1){
         moverCursor(6, 20);
         mudarEstilo(ESTILO_REVERSO, ESTILO_NEGRITO);
@@ -343,6 +345,96 @@ void modoComputadorJogador(){
     }
 }
 
+void modoComputadorComputador(){
+    int vez = 1;
+
+    titulo("COMPUTADOR1", 11, 4);
+    int nivelComp1 = menuComputador();
+    //recebe o nivel do computador1
+
+    int corComp1 = (rand() % 5) + 31; // escolhe uma cor para o computador1
+    Jogador computador1 = {"computador1", corComp1}; // cria uma struct jogador para o computador1
+
+    limparTela();
+
+    titulo("COMPUTADOR2", 11, 4);
+    int nivelComp2 = menuComputador();
+    //recebe o nivel do computador2
+
+    int corComp2 = corComp1;
+
+    while(corComp2 == corComp1){ //enquanto a cor do computador2 for igua a do computador1 escolhe outra cor
+        corComp2 = (rand() % 5) + 31;
+    }
+
+    Jogador computador2 = {"computador2", corComp2}; //cria uma struct jogador para o computador2
+
+    while(1){
+        int vencedor = 0;
+
+        printVez(computador1, computador2, vez);
+
+        printTabela(computador1.cor, computador2.cor);
+
+        switch (vez){
+            case 1:
+                // jogada do computador1
+                break;
+        
+            case 2:
+                // jogada do computador2
+                break;
+        }
+
+        printTabela(computador1.cor, computador2.cor);
+
+        vencedor = analisarTabela();
+
+        if(vencedor){
+            limparLinha(21);
+            
+            switch (vencedor){
+                case 1:
+                    moverCursor(21, 23);
+                    printf("Jogo terminou! Vencedor: ");
+                    mudarEstilo(ESTILO_REVERSO, computador1.cor);
+                    printf("%s\n", computador1.nome);
+                    resetarCor();
+
+                    break;
+                
+                case 2:
+                    moverCursor(21, 23);
+                    printf("Jogo terminou! Vencedor: ");
+                    mudarEstilo(ESTILO_REVERSO, computador2.cor);
+                    printf("%s\n", computador2.nome);
+                    resetarCor();
+
+                    break;
+
+                case 3:
+                    moverCursor(21, 27);
+                    printf("Jogo terminou em ");
+                    mudarEstilo(ESTILO_REVERSO, ESTILO_NEGRITO);
+                    printf("empate!\n");
+                    resetarCor();
+
+                    break;
+            }
+            
+            break;
+        }
+
+        if(vez == 1){
+            vez=2;
+        }else{
+            vez=1;
+        }
+
+        limparTela();
+    }
+}
+
 int main(){ //programa principal
     Jogador jogador1;
     Jogador jogador2;
@@ -366,6 +458,11 @@ int main(){ //programa principal
 
             modoComputadorJogador();
             break;
+
+        case 3:
+            //se o usuario escolheu o modo computador vs computador
+
+            modoComputadorComputador();
     }
     
 }
