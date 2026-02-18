@@ -51,15 +51,37 @@ int jogadaMedia(){
 }
 
 int jogadaDificil(){
-    //Análise de jogada
-    //prioridade do modo dificil será defender(com isso é possivel utilizar o nivel medio) para depois atacar:
-    //Analisando se posui algo para defender:
-    int horizontal = analiseCompHorizontal();
-    int vertical = analiseCompVertical();
-    int diagonal = analiseCompDiagonal();
-    if(horizontal || vertical || diagonal){
+    //a prioridade vai ser o ataque, caso n haja ataque ele defende, caso n tenha nenhum dos dois ele faz uma jogada aleatoria:
+    int ataqueH = analiseAtaqueHorizontal();
+    int ataqueV = analiseAtaqueVertical();
+    int ataqueD = analiseAtaqueDiagonal();
+    //analise e a jogada do ataque!
+    if(ataqueH == -1 && ataqueV == -1 && ataqueD == -1){
         jogadaMedia();
         return 1;
     }
-    //Analise da jogada dificil:
+    
+    int qq = 0;
+    int aux[3];
+    if(ataqueD != -1){
+        aux[qq++] = ataqueD;
+    }
+    if(ataqueH != -1){
+        aux[qq++] = ataqueH;
+    }
+    if(ataqueV != -1){
+        aux[qq++] = ataqueV;
+    }
+
+    int tentativa = 0;
+    int maxTentativa = 5;
+    while(tentativa < maxTentativa){
+        int i = rand() % qq;
+        if(capturarJogada(2,aux[i] + 1)){
+            return 1;
+        }
+        tentativa++;
+    }
+    return 0;
+
 }

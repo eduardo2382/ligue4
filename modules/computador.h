@@ -3,5 +3,6 @@
 
 int jogadaFacil();
 int jogadaMedia();
+int jogadaDificil();
 
 #endif

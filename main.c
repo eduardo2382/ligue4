@@ -287,6 +287,8 @@ void modoComputadorJogador(){
                         case 2:
                             comp = jogadaMedia();
                             break;
+                        case 3:
+                            comp = jogadaDificil();
                     }
                     if(!comp){
                         // Garante que o computador não pule a jogada para o jogador(gambiarra pq o computador não estava jogndo em alguns momentos)
