@@ -179,7 +179,7 @@ void printVez( Jogador jogador1, Jogador jogador2, int vez){
     resetarCor();
 };
 
-void modoJogadorJogador(){
+int modoJogadorJogador(){
     int vez = 1;
 
     Jogador jogador1;
@@ -236,7 +236,15 @@ void modoJogadorJogador(){
                     break;
             }
             
-            break;
+            // lAlgoritimo para voltar ao menu
+            int aux;
+            printf("\nDeseja voltar para o menu principal:\n1.Sim\n2.Não\n");
+            scanf("%d", &aux);
+            while(aux != 1 && aux != 2){
+                printf("Resposta invalida, digite a opção correta: ");
+                scanf("%d", &aux);
+            }
+            return (aux == 1); 
         }
 
         if(vez == 1){
@@ -249,7 +257,7 @@ void modoJogadorJogador(){
     }
 }
 
-void modoComputadorJogador(){
+int modoComputadorJogador(){
     int nivel = menuComputador(); // exibe o menu de niveis e captura a escolha do usuario
     int vez = 1;
 
@@ -336,7 +344,15 @@ void modoComputadorJogador(){
                     break;
             }
             
-            break;
+            //Algoritimo para voltar ao menu
+            int aux;
+            printf("\nDeseja voltar para o menu principal:\n1.Sim\n2.Não\n");
+            scanf("%d", &aux);
+            while(aux != 1 && aux != 2){
+                printf("Resposta invalida, digite a opção correta: ");
+                scanf("%d", &aux);
+            }
+            return (aux == 1);
         }
 
         if(vez == 1){
@@ -349,7 +365,7 @@ void modoComputadorJogador(){
     }
 }
 
-void modoComputadorComputador(){
+int modoComputadorComputador(){
     srand(time(NULL));
     int vez = 1;
 
@@ -365,6 +381,10 @@ void modoComputadorComputador(){
     titulo("COMPUTADOR2", 11, 4);
     int nivelComp2 = menuComputador();
     //recebe o nivel do computador2
+
+    //resolvendo bug visual
+    limparTela();
+
 
     int corComp2 = corComp1;
 
@@ -439,30 +459,34 @@ void modoComputadorComputador(){
                     mudarEstilo(ESTILO_REVERSO, computador1.cor);
                     printf("%s\n", computador1.nome);
                     resetarCor();
-
-                    break;
-                
+                    break;          
                 case 2:
                     moverCursor(21, 23);
                     printf("Jogo terminou! Vencedor: ");
                     mudarEstilo(ESTILO_REVERSO, computador2.cor);
                     printf("%s\n", computador2.nome);
                     resetarCor();
-
                     break;
-
                 case 3:
                     moverCursor(21, 27);
                     printf("Jogo terminou em ");
                     mudarEstilo(ESTILO_REVERSO, ESTILO_NEGRITO);
                     printf("empate!\n");
                     resetarCor();
-
                     break;
+                }
+
+                //algoritimo que retorna ao menu principal:
+                int aux;
+                printf("\nDeseja voltar para o menu principal:\n1.Sim\n2.Não\n");
+                scanf("%d", &aux);
+                while(aux != 1 && aux != 2){
+                    printf("Resposta invalida, digite a opção correta: ");
+                    scanf("%d", &aux);
+                }
+                return (aux == 1);
             }
             
-            break;
-        }
 
         if(vez == 1){
             vez=2;
@@ -477,31 +501,45 @@ void modoComputadorComputador(){
 int main(){ //programa principal
     Jogador jogador1;
     Jogador jogador2;
-
-    limparTela();
-
-    int escolha = menuInicial();//chama o menu inicial e salva a escolha do usuario
-
-    limparTela();
-
-    //Uma adaptação melhor do que if, else
-    switch (escolha){
-        case 1:
-            //se o usuario escolheu o modo jogador vs jogador
-
-            modoJogadorJogador();
-            break;
-
-        case 2:
-            //se o usuario escolheu o modo computador vs jogador
-
-            modoComputadorJogador();
-            break;
-
-        case 3:
-            //se o usuario escolheu o modo computador vs computador
-
-            modoComputadorComputador();
-    }
+    int flag = 0;
+    do{
+        zerarJogadas();
+        limparTela();
     
-}
+        int escolha = menuInicial();//chama o menu inicial e salva a escolha do usuario
+    
+        limparTela();
+    
+        //Uma adaptação melhor do que if, else
+        switch (escolha){
+            case 1:
+                //se o usuario escolheu o modo jogador vs jogador
+    
+                flag = modoJogadorJogador();
+                break;
+    
+            case 2:
+                //se o usuario escolheu o modo computador vs jogador
+    
+                flag = modoComputadorJogador();
+                break;
+    
+            case 3:
+                //se o usuario escolheu o modo computador vs computador
+    
+                flag = modoComputadorComputador();
+                break;
+            case 4:
+                // Encerrar o jogo:
+                printf("\nFim de jogo!");
+                return 0;
+        }
+        if(flag == 0){
+            limparTela();
+            printf("\nFim de jogo!");
+        }
+        
+    }while (flag);
+
+    } 
+    

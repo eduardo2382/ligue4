@@ -17,6 +17,7 @@
 
 void printTabela(int corJogador1, int corJogador2);
 int atualizarTabela(int vez, int coluna);
+void zerarJogadas();
 int analisarLinhas();
 int analisarColunas();
 int analisarDiagonal();

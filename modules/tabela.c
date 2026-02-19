@@ -11,6 +11,15 @@ int jogadas[6][7] = {
     {0, 0, 0, 0, 0, 0, 0}
 };
 
+void zerarJogadas(){
+    //função que zera a matriz para o inicio.
+    for(int i = 0; i < 6; i++){
+        for(int j = 0;  j< 7; j++){
+            jogadas[i][j] = 0;
+        }
+    }
+}
+
 void printTabela(int corJogador1, int corJogador2){
     int linhaInic = 9;
     int colunInic = 27;
