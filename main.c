@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
-#include <windows.h>
 #include "modules/terminal.h"
 #include "modules/menu.h"
 #include "modules/tabela.h"
@@ -84,40 +83,39 @@ Jogador jogador(char *tit, int corEscolhida){
     printf("\n");
 
     printf("Selecione a cor do jogador: ");
-    scanf("%d", &escolhaCor);//captura a cor escolhida pelo usuario
+    while(!(scanf("%d", &escolhaCor))){
+        //loop caso a entrada tenha sido em formato invalido
+        moverCursor(7, 1);
+        limparLinha(7);
+        scanf("%*[^\n]"); // codigo para descartar a linha bugada
+        printf("Opcao invalida, selecione uma opcao valida: ");
+    }
 
-    switch (escolhaCor)
-    {
-    case 1:
-        jogador.cor = VERMELHO;
-        break;
+    switch (escolhaCor){
+        case 1:
+            jogador.cor = VERMELHO;
+            break;
 
-    case 2:
-        jogador.cor = VERDE;
-        break;
+        case 2:
+            jogador.cor = VERDE;
+            break;
 
-    case 3:
-        jogador.cor = AMARELO;
-        break;
+        case 3:
+            jogador.cor = AMARELO;
+            break;
 
-    case 4:
-        jogador.cor = AZUL;
-        break;
-
-    case 5:
-        jogador.cor = MAGENTA;
-        break;
-
-    case 6:
-        jogador.cor = CIANO;
-        break;
-    
-    default:
-        break;
+        case 4:
+            jogador.cor = AZUL;
+            break;
+        
+        default:
+            break;
     }
 
     while(!(escolhaCor >= 1 && escolhaCor <= tamCores) || jogador.cor == corEscolhida){ 
         //caso a opcao seja invalida ou a cor ja tenha sido escolhida pergunta de novo ao usuario
+        moverCursor(7, 1);
+        limparLinha(7);
         printf("Opcao invalida, selecione uma opcao valida: ");
         scanf("%d", &escolhaCor);
 
@@ -143,6 +141,8 @@ Jogador jogador(char *tit, int corEscolhida){
             break;
         }
     }
+
+    
 
     return jogador; //retorna a struct Jogador com os dados
 }
@@ -238,13 +238,15 @@ int modoJogadorJogador(){
             
             // lAlgoritimo para voltar ao menu
             int aux;
-            printf("\nDeseja voltar para o menu principal:\n1.Sim\n2.Não\n");
+            printf("\nDeseja voltar para o menu principal? (1.Sim 2.Não): ");
             scanf("%d", &aux);
-            while(aux != 1 && aux != 2){
-                printf("Resposta invalida, digite a opção correta: ");
-                scanf("%d", &aux);
+            while(!(scanf("%d", &aux)) || aux != 1 && aux != 2){
+                moverCursor(23, 1);
+                printf("\033[2K"); // codigo ansii para limpar a linha
+                scanf("%*[^\n]"); // codigo para descartar a linha bugada
+                printf("Resposta invalida, digite a opção correta (1.Sim 2.Não): ");
             }
-            return (aux == 1); 
+            return (aux == 1);
         }
 
         if(vez == 1){
@@ -346,11 +348,12 @@ int modoComputadorJogador(){
             
             //Algoritimo para voltar ao menu
             int aux;
-            printf("\nDeseja voltar para o menu principal:\n1.Sim\n2.Não\n");
-            scanf("%d", &aux);
-            while(aux != 1 && aux != 2){
-                printf("Resposta invalida, digite a opção correta: ");
-                scanf("%d", &aux);
+            printf("\nDeseja voltar para o menu principal? (1.Sim 2.Não): ");
+            while(!(scanf("%d", &aux)) || aux != 1 && aux != 2){
+                moverCursor(23, 1);
+                printf("\033[2K"); // codigo ansii para limpar a linha
+                scanf("%*[^\n]"); // codigo para descartar a linha bugada
+                printf("Resposta invalida, digite a opção correta (1.Sim 2.Não): ");
             }
             return (aux == 1);
         }
@@ -445,7 +448,6 @@ int modoComputadorComputador(){
 
         printTabela(computador1.cor, computador2.cor);
         //Pausa no terminal para dar tempo das jogadas
-        Sleep(1000);
         //-------------
         vencedor = analisarTabela();
 
@@ -478,11 +480,12 @@ int modoComputadorComputador(){
 
                 //algoritimo que retorna ao menu principal:
                 int aux;
-                printf("\nDeseja voltar para o menu principal:\n1.Sim\n2.Não\n");
-                scanf("%d", &aux);
-                while(aux != 1 && aux != 2){
-                    printf("Resposta invalida, digite a opção correta: ");
-                    scanf("%d", &aux);
+                printf("\nDeseja voltar para o menu principal? (1.Sim 2.Não): ");
+                while(!(scanf("%d", &aux)) || aux != 1 && aux != 2){
+                    moverCursor(23, 1);
+                    printf("\033[2K"); // codigo ansii para limpar a linha
+                    scanf("%*[^\n]"); // codigo para descartar a linha bugada
+                    printf("Resposta invalida, digite a opção correta (1.Sim 2.Não): ");
                 }
                 return (aux == 1);
             }

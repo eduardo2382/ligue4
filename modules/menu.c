@@ -111,7 +111,7 @@ int menuComputador(){
         
     printMenuComputador();//imprime o menu
 
-    moverCursor(13, 2);
+    moverCursor(12, 2);
 
     printf("Digite o numero da sua escolha: ");
     while(!(scanf("%d", &escolha)) || !(escolha >= 1 && escolha <= tamLista)){ //caso a escolha nao esteja de acordo pede pro usuario repetir ate que alguma valida seja selecionada
