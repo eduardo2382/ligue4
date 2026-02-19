@@ -4,11 +4,10 @@
 #include <stdlib.h>
 #include <time.h>
 
-int jogadaFacil(){
-    srand(time(NULL));
+int jogadaFacil(int vez){
     int numCol = (rand() % 7) + 1;
 
-    while(!(capturarJogada(2, numCol))){
+    while(!(capturarJogada(vez, numCol))){
         numCol = (rand() % 7) + 1;
     }
     return 1;
@@ -23,7 +22,7 @@ int jogadaMedia(int vez){
     //analise da jogada
     //ambas as possibilidades dão negativa.
     if(horizontal == -1 && vertical == -1 && diagonal == -1){
-        return jogadaFacil();
+        return jogadaFacil(vez);
     }
     //alguma das possibilidades da True
     int qq = 0;
@@ -42,7 +41,7 @@ int jogadaMedia(int vez){
     int maxTentativa = 5;
     while(tentativa < maxTentativa){
         int i = rand() % qq;
-        if(capturarJogada(2,aux[i] + 1)){
+        if(capturarJogada(vez,aux[i] + 1)){
             return 1;
         }
         tentativa++;
@@ -77,7 +76,7 @@ int jogadaDificil(int vez){
     int maxTentativa = 5;
     while(tentativa < maxTentativa){
         int i = rand() % qq;
-        if(capturarJogada(2,aux[i] + 1)){
+        if(capturarJogada(vez,aux[i] + 1)){
             return 1;
         }
         tentativa++;

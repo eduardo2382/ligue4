@@ -1,5 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
+#include <windows.h>
 #include "modules/terminal.h"
 #include "modules/menu.h"
 #include "modules/tabela.h"
@@ -282,7 +284,7 @@ void modoComputadorJogador(){
                     int comp = 0;
                     switch (nivel){
                         case 1:
-                            comp = jogadaFacil();
+                            comp = jogadaFacil(2);
                             break;
                         case 2:
                             comp = jogadaMedia(2);
@@ -292,7 +294,7 @@ void modoComputadorJogador(){
                     }
                     if(!comp){
                         // Garante que o computador não pule a jogada para o jogador(gambiarra pq o computador não estava jogndo em alguns momentos)
-                        jogadaFacil();
+                        jogadaFacil(2);
                 }
                 break;
             }
@@ -348,13 +350,14 @@ void modoComputadorJogador(){
 }
 
 void modoComputadorComputador(){
+    srand(time(NULL));
     int vez = 1;
 
     titulo("COMPUTADOR1", 11, 4);
     int nivelComp1 = menuComputador();
     //recebe o nivel do computador1
 
-    int corComp1 = (rand() % 5) + 31; // escolhe uma cor para o computador1
+    int corComp1 = (rand() % 6) + 31; // escolhe uma cor para o computador1
     Jogador computador1 = {"computador1", corComp1}; // cria uma struct jogador para o computador1
 
     limparTela();
@@ -365,8 +368,8 @@ void modoComputadorComputador(){
 
     int corComp2 = corComp1;
 
-    while(corComp2 == corComp1){ //enquanto a cor do computador2 for igua a do computador1 escolhe outra cor
-        corComp2 = (rand() % 5) + 31;
+    while(corComp2 == corComp1){ //enquanto a cor do computador2 for igual a do computador1 escolhe outra cor
+        corComp2 = (rand() % 6) + 31;
     }
 
     Jogador computador2 = {"computador2", corComp2}; //cria uma struct jogador para o computador2
@@ -384,7 +387,7 @@ void modoComputadorComputador(){
                 // jogada do computador1
                 switch(nivelComp1){
                     case 1:
-                    flag = jogadaFacil();
+                    flag = jogadaFacil(1);
                     break;
                     case 2:
                     flag = jogadaMedia(1);
@@ -394,7 +397,7 @@ void modoComputadorComputador(){
                     break;
                 }
                 if(!flag){
-                    jogadaFacil();
+                    jogadaFacil(1);
                 }
                 break;
                 
@@ -404,7 +407,7 @@ void modoComputadorComputador(){
                 int flag = 0;
                 switch(nivelComp2){
                     case 1:
-                    flag = jogadaFacil();
+                    flag = jogadaFacil(2);
                     break;
                     case 2:
                     flag = jogadaMedia(2);
@@ -414,14 +417,16 @@ void modoComputadorComputador(){
                     break;
                 }
                 if(!flag){
-                    jogadaFacil();
+                    jogadaFacil(2);
                 }
             }
                 break;
         }
 
         printTabela(computador1.cor, computador2.cor);
-
+        //Pausa no terminal para dar tempo das jogadas
+        Sleep(1000);
+        //-------------
         vencedor = analisarTabela();
 
         if(vencedor){

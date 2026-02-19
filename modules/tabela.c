@@ -351,16 +351,16 @@ int analisarTabela(){
 int analiseCompHorizontal(int vez){
     //mudança de analise geral para reciocinio do game:
     if(vez == 1){
-        vez == 2;
+        vez = 2;
     }else{
-        vez == 1;
+        vez = 1;
     }
     //Leitura da direita para esquerda:
     for(int i = 5; i >= 0; i--){
         int aux = 0;
         for(int j = 0; j < 7; j++){
             //Analise de jogada:
-            if(aux == 2 && jogadas[i][j+1] == 1 && jogadas[i][j] == 0 && j != 6){
+            if(aux == 2 && jogadas[i][j+1] == vez && jogadas[i][j] == 0 && j != 6){
                 return j; 
             }
             //Analise da linha:
@@ -380,7 +380,7 @@ int analiseCompHorizontal(int vez){
             int aux = 0;
             for(int j = 6; j >= 0; j--){
                 //analise da jogada
-                if(aux == 2 && jogadas[i][j - 1] == 1 && jogadas[i][j] == 0 && j != 0){
+                if(aux == 2 && jogadas[i][j - 1] == vez && jogadas[i][j] == 0 && j != 0){
                     return j;
                 }
                 //avaliação:
@@ -399,9 +399,9 @@ int analiseCompHorizontal(int vez){
 int analiseCompVertical(int vez){
     //mudança da analise da posição:
     if(vez == 1){
-        vez == 2;
+        vez = 2;
     }else{
-        vez == 1;
+        vez = 1;
     }
     //------------
 
@@ -423,9 +423,9 @@ int analiseCompVertical(int vez){
 int analiseCompDiagonal(int vez) {
     //mudança de analise:
     if(vez == 1){
-        vez == 2;;
+        vez = 2;;
     }else{
-        vez == 1;
+        vez = 1;
     }
     //-----------
 
