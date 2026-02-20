@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
+#include <windows.h>
 #include "modules/terminal.h"
 #include "modules/menu.h"
 #include "modules/tabela.h"
@@ -455,6 +456,7 @@ int modoComputadorComputador(){
 
         printTabela(computador1.cor, computador2.cor);
         //Pausa no terminal para dar tempo das jogadas
+        Sleep(1000);
         //-------------
         vencedor = analisarTabela();
 
