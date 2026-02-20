@@ -11,6 +11,15 @@ int jogadas[6][7] = {
     {0, 0, 0, 0, 0, 0, 0}
 };
 
+void zerarJogadas(){
+    //função que zera a matriz para o inicio.
+    for(int i = 0; i < 6; i++){
+        for(int j = 0;  j< 7; j++){
+            jogadas[i][j] = 0;
+        }
+    }
+}
+
 void printTabela(int corJogador1, int corJogador2){
     int linhaInic = 9;
     int colunInic = 27;
@@ -347,17 +356,24 @@ int analisarTabela(){
     }
 }
 //funções de analise do computador:
-int analiseCompHorizontal(){
+//toda vez que entrar aqui torna - se contrario, ex: 1 vira 2 e 2 vira 1:
+int analiseCompHorizontal(int vez){
+    //mudança de analise geral para reciocinio do game:
+    if(vez == 1){
+        vez = 2;
+    }else{
+        vez = 1;
+    }
     //Leitura da direita para esquerda:
     for(int i = 5; i >= 0; i--){
         int aux = 0;
         for(int j = 0; j < 7; j++){
             //Analise de jogada:
-            if(aux == 2 && jogadas[i][j+1] == 1 && jogadas[i][j] == 0 && j != 6){
+            if(aux == 2 && jogadas[i][j+1] == vez && jogadas[i][j] == 0 && j != 6){
                 return j; 
             }
             //Analise da linha:
-            if(jogadas[i][j] == 1){
+            if(jogadas[i][j] == vez){
                 aux++;
             }else{
                 aux = 0;
@@ -373,11 +389,11 @@ int analiseCompHorizontal(){
             int aux = 0;
             for(int j = 6; j >= 0; j--){
                 //analise da jogada
-                if(aux == 2 && jogadas[i][j - 1] == 1 && jogadas[i][j] == 0 && j != 0){
+                if(aux == 2 && jogadas[i][j - 1] == vez && jogadas[i][j] == 0 && j != 0){
                     return j;
                 }
                 //avaliação:
-                if(jogadas[i][j] == 1){
+                if(jogadas[i][j] == vez){
                     aux++;
                 }else{
                     aux = 0;
@@ -389,11 +405,19 @@ int analiseCompHorizontal(){
         }
         return -1;
 }
-int analiseCompVertical(){
+int analiseCompVertical(int vez){
+    //mudança da analise da posição:
+    if(vez == 1){
+        vez = 2;
+    }else{
+        vez = 1;
+    }
+    //------------
+
     for(int j = 0; j < 7; j++){
         int aux = 0;
         for(int i = 5; i >= 0; i--){
-            if(jogadas[i][j] == 1){
+            if(jogadas[i][j] == vez){
                 aux++;
             }else{
                 aux = 0;
@@ -405,7 +429,15 @@ int analiseCompVertical(){
     }
     return -1;
 }
-int analiseCompDiagonal() {
+int analiseCompDiagonal(int vez){
+    //mudança de analise:
+    if(vez == 1){
+        vez = 2;;
+    }else{
+        vez = 1;
+    }
+    //-----------
+
     int n = 6;
     int m = 7;
     for(int coluna = 0; coluna < m; coluna++){
@@ -414,7 +446,7 @@ int analiseCompDiagonal() {
         int aux = 0;  
         
         while(i < n && j < m){
-            if(jogadas[i][j] == 1){
+            if(jogadas[i][j] == vez){
                 aux++;
                 
                 // Encontrou 3 peças do jogador
@@ -448,7 +480,7 @@ int analiseCompDiagonal() {
         int aux = 0;
         
         while(i < n && j < m){
-            if(jogadas[i][j] == 1){
+            if(jogadas[i][j] == vez){
                 aux++;
                 
                 if(aux == 3){
@@ -475,15 +507,13 @@ int analiseCompDiagonal() {
         }
     }
     
-    // ===== DIAGONAIS SECUNDÁRIAS (/) =====
-    // Parte superior (começando na primeira linha)
     for(int coluna = 0; coluna < m; coluna++){
         int i = 0;
         int j = coluna;
         int aux = 0;
         
         while(i < n && j >= 0){
-            if(jogadas[i][j] == 1){
+            if(jogadas[i][j] == vez){
                 aux++;
                 
                 if(aux == 3){
@@ -510,14 +540,13 @@ int analiseCompDiagonal() {
         }
     }
     
-    // Parte inferior (começando na última coluna)
     for(int linha = 1; linha < n; linha++){
         int i = linha;
         int j = m - 1;
         int aux = 0;
         
         while(i < n && j >= 0){
-            if(jogadas[i][j] == 1){
+            if(jogadas[i][j] == vez){
                 aux++;
                 
                 if(aux == 3){
@@ -548,11 +577,11 @@ int analiseCompDiagonal() {
 }
 
 //funções de ataque:
-int analiseAtaqueVertical(){
+int analiseAtaqueVertical(int vez){
     for(int c = 0; c < 7; c++){
         int aux = 0;
         for(int l = 5; l >= 0; l--){
-            if(jogadas[l][c] == 2){
+            if(jogadas[l][c] == vez){
                 aux++;
             }else{
                 aux = 0;
@@ -564,7 +593,7 @@ int analiseAtaqueVertical(){
     }
     return -1;
 }
-int analiseAtaqueHorizontal(){
+int analiseAtaqueHorizontal(int vez){
  //Leitura da direita para esquerda:
     for(int i = 5; i >= 0; i--){
         int aux = 0;
@@ -574,7 +603,7 @@ int analiseAtaqueHorizontal(){
                 return j; 
             }
             //Analise da linha:
-            if(jogadas[i][j] == 2){
+            if(jogadas[i][j] == vez){
                 aux++;
             }else{
                 aux = 0;
@@ -594,7 +623,7 @@ int analiseAtaqueHorizontal(){
                 return j;
             }
             //avaliação:
-            if(jogadas[i][j] == 2){
+            if(jogadas[i][j] == vez){
                 aux++;
             }else{
                 aux = 0;
@@ -606,7 +635,7 @@ int analiseAtaqueHorizontal(){
     }
     return -1;
 }
-int analiseAtaqueDiagonal(){
+int analiseAtaqueDiagonal(int vez){
     int n = 6;
     int m = 7;
     for(int coluna = 0; coluna < m; coluna++){
@@ -615,7 +644,7 @@ int analiseAtaqueDiagonal(){
         int aux = 0;  
         
         while(i < n && j < m){
-            if(jogadas[i][j] == 2){
+            if(jogadas[i][j] == vez){
                 aux++;
                 
             
@@ -649,7 +678,7 @@ int analiseAtaqueDiagonal(){
         int aux = 0;
         
         while(i < n && j < m){
-            if(jogadas[i][j] == 2){
+            if(jogadas[i][j] == vez){
                 aux++;
                 
                 if(aux == 3){
@@ -682,7 +711,7 @@ int analiseAtaqueDiagonal(){
         int aux = 0;
         
         while(i < n && j >= 0){
-            if(jogadas[i][j] == 2){
+            if(jogadas[i][j] == vez){
                 aux++;
                 
                 if(aux == 3){
@@ -713,7 +742,7 @@ int analiseAtaqueDiagonal(){
         int aux = 0;
         
         while(i < n && j >= 0){
-            if(jogadas[i][j] == 2){
+            if(jogadas[i][j] == vez){
                 aux++;
                 
                 if(aux == 3){

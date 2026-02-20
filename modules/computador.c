@@ -4,26 +4,25 @@
 #include <stdlib.h>
 #include <time.h>
 
-int jogadaFacil(){
-    srand(time(NULL));
+int jogadaFacil(int vez){
     int numCol = (rand() % 7) + 1;
 
-    while(!(capturarJogada(2, numCol))){
+    while(!(capturarJogada(vez, numCol))){
         numCol = (rand() % 7) + 1;
     }
     return 1;
 }
 
-int jogadaMedia(){
+int jogadaMedia(int vez){
     //Entrada das respostas:
-    int horizontal = analiseCompHorizontal();
-    int vertical = analiseCompVertical();
-    int diagonal = analiseCompDiagonal();
+    int horizontal = analiseCompHorizontal(vez);
+    int vertical = analiseCompVertical(vez);
+    int diagonal = analiseCompDiagonal(vez);
 
     //analise da jogada
     //ambas as possibilidades dão negativa.
     if(horizontal == -1 && vertical == -1 && diagonal == -1){
-        return jogadaFacil();
+        return jogadaFacil(vez);
     }
     //alguma das possibilidades da True
     int qq = 0;
@@ -42,7 +41,7 @@ int jogadaMedia(){
     int maxTentativa = 5;
     while(tentativa < maxTentativa){
         int i = rand() % qq;
-        if(capturarJogada(2,aux[i] + 1)){
+        if(capturarJogada(vez,aux[i] + 1)){
             return 1;
         }
         tentativa++;
@@ -50,14 +49,14 @@ int jogadaMedia(){
     return 0;
 }
 
-int jogadaDificil(){
+int jogadaDificil(int vez){
     //a prioridade vai ser o ataque, caso n haja ataque ele defende, caso n tenha nenhum dos dois ele faz uma jogada aleatoria:
-    int ataqueH = analiseAtaqueHorizontal();
-    int ataqueV = analiseAtaqueVertical();
-    int ataqueD = analiseAtaqueDiagonal();
+    int ataqueH = analiseAtaqueHorizontal(vez);
+    int ataqueV = analiseAtaqueVertical(vez);
+    int ataqueD = analiseAtaqueDiagonal(vez);
     //analise e a jogada do ataque!
     if(ataqueH == -1 && ataqueV == -1 && ataqueD == -1){
-        jogadaMedia();
+        jogadaMedia(vez);
         return 1;
     }
     
@@ -77,7 +76,7 @@ int jogadaDificil(){
     int maxTentativa = 5;
     while(tentativa < maxTentativa){
         int i = rand() % qq;
-        if(capturarJogada(2,aux[i] + 1)){
+        if(capturarJogada(vez,aux[i] + 1)){
             return 1;
         }
         tentativa++;

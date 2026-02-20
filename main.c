@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
 #include "modules/terminal.h"
 #include "modules/menu.h"
 #include "modules/tabela.h"
@@ -82,40 +83,46 @@ Jogador jogador(char *tit, int corEscolhida){
     printf("\n");
 
     printf("Selecione a cor do jogador: ");
-    scanf("%d", &escolhaCor);//captura a cor escolhida pelo usuario
+    while(!(scanf("%d", &escolhaCor))){
+        //loop caso a entrada tenha sido em formato invalido
+        moverCursor(7, 1);
+        limparLinha(7);
+        scanf("%*[^\n]"); // codigo para descartar a linha bugada
+        printf("Opcao invalida, selecione uma opcao valida: ");
+    }
 
-    switch (escolhaCor)
-    {
-    case 1:
-        jogador.cor = VERMELHO;
-        break;
+    switch (escolhaCor){
+        case 1:
+            jogador.cor = VERMELHO;
+            break;
 
-    case 2:
-        jogador.cor = VERDE;
-        break;
+        case 2:
+            jogador.cor = VERDE;
+            break;
 
-    case 3:
-        jogador.cor = AMARELO;
-        break;
+        case 3:
+            jogador.cor = AMARELO;
+            break;
 
-    case 4:
-        jogador.cor = AZUL;
-        break;
+        case 4:
+            jogador.cor = AZUL;
+            break;
 
-    case 5:
-        jogador.cor = MAGENTA;
-        break;
-
-    case 6:
-        jogador.cor = CIANO;
-        break;
-    
-    default:
-        break;
+        case 5:
+            jogador.cor = MAGENTA;
+            break;
+        case 6:
+            jogador.cor = CIANO;
+            break;
+            
+        default:
+            break;
     }
 
     while(!(escolhaCor >= 1 && escolhaCor <= tamCores) || jogador.cor == corEscolhida){ 
         //caso a opcao seja invalida ou a cor ja tenha sido escolhida pergunta de novo ao usuario
+        moverCursor(7, 1);
+        limparLinha(7);
         printf("Opcao invalida, selecione uma opcao valida: ");
         scanf("%d", &escolhaCor);
 
@@ -142,6 +149,8 @@ Jogador jogador(char *tit, int corEscolhida){
         }
     }
 
+    
+
     return jogador; //retorna a struct Jogador com os dados
 }
 
@@ -149,6 +158,8 @@ void printVez( Jogador jogador1, Jogador jogador2, int vez){
     resetarCor();
 
     titulo("Vez da Jogada:", 14, 4);
+
+    limparLinha(6);
 
     if(vez==1){
         moverCursor(6, 20);
@@ -175,7 +186,7 @@ void printVez( Jogador jogador1, Jogador jogador2, int vez){
     resetarCor();
 };
 
-void modoJogadorJogador(){
+int modoJogadorJogador(){
     int vez = 1;
 
     Jogador jogador1;
@@ -232,7 +243,17 @@ void modoJogadorJogador(){
                     break;
             }
             
-            break;
+            // lAlgoritimo para voltar ao menu
+            int aux;
+            printf("\nDeseja voltar para o menu principal? (1.Sim 2.Não): ");
+            scanf("%d", &aux);
+            while(!(scanf("%d", &aux)) || aux != 1 && aux != 2){
+                moverCursor(23, 1);
+                printf("\033[2K"); // codigo ansii para limpar a linha
+                scanf("%*[^\n]"); // codigo para descartar a linha bugada
+                printf("Resposta invalida, digite a opção correta (1.Sim 2.Não): ");
+            }
+            return (aux == 1);
         }
 
         if(vez == 1){
@@ -245,7 +266,7 @@ void modoJogadorJogador(){
     }
 }
 
-void modoComputadorJogador(){
+int modoComputadorJogador(){
     int nivel = menuComputador(); // exibe o menu de niveis e captura a escolha do usuario
     int vez = 1;
 
@@ -280,17 +301,17 @@ void modoComputadorJogador(){
                     int comp = 0;
                     switch (nivel){
                         case 1:
-                            comp = jogadaFacil();
+                            comp = jogadaFacil(2);
                             break;
                         case 2:
-                            comp = jogadaMedia();
+                            comp = jogadaMedia(2);
                             break;
                         case 3:
-                            comp = jogadaDificil();
+                            comp = jogadaDificil(2);
                     }
                     if(!comp){
                         // Garante que o computador não pule a jogada para o jogador(gambiarra pq o computador não estava jogndo em alguns momentos)
-                        jogadaFacil();
+                        jogadaFacil(2);
                 }
                 break;
             }
@@ -332,7 +353,16 @@ void modoComputadorJogador(){
                     break;
             }
             
-            break;
+            //Algoritimo para voltar ao menu
+            int aux;
+            printf("\nDeseja voltar para o menu principal? (1.Sim 2.Não): ");
+            while(!(scanf("%d", &aux)) || aux != 1 && aux != 2){
+                moverCursor(23, 1);
+                printf("\033[2K"); // codigo ansii para limpar a linha
+                scanf("%*[^\n]"); // codigo para descartar a linha bugada
+                printf("Resposta invalida, digite a opção correta (1.Sim 2.Não): ");
+            }
+            return (aux == 1);
         }
 
         if(vez == 1){
@@ -345,29 +375,181 @@ void modoComputadorJogador(){
     }
 }
 
+int modoComputadorComputador(){
+    srand(time(NULL));
+    int vez = 1;
+
+    titulo("COMPUTADOR1", 11, 4);
+    int nivelComp1 = menuComputador();
+    //recebe o nivel do computador1
+
+    int corComp1 = (rand() % 6) + 31; // escolhe uma cor para o computador1
+    Jogador computador1 = {"computador1", corComp1}; // cria uma struct jogador para o computador1
+
+    limparTela();
+
+    titulo("COMPUTADOR2", 11, 4);
+    int nivelComp2 = menuComputador();
+    //recebe o nivel do computador2
+
+    //resolvendo bug visual
+    limparTela();
+
+
+    int corComp2 = corComp1;
+
+    while(corComp2 == corComp1){ //enquanto a cor do computador2 for igual a do computador1 escolhe outra cor
+        corComp2 = (rand() % 6) + 31;
+    }
+
+    Jogador computador2 = {"computador2", corComp2}; //cria uma struct jogador para o computador2
+
+    while(1){
+        int vencedor = 0;
+
+        printVez(computador1, computador2, vez);
+
+        printTabela(computador1.cor, computador2.cor);
+
+        switch (vez){
+            case 1:{
+                int flag = 0;
+                // jogada do computador1
+                switch(nivelComp1){
+                    case 1:
+                    flag = jogadaFacil(1);
+                    break;
+                    case 2:
+                    flag = jogadaMedia(1);
+                    break;
+                    case 3:
+                    flag = jogadaDificil(1);
+                    break;
+                }
+                if(!flag){
+                    jogadaFacil(1);
+                }
+                break;
+                
+            }
+            case 2:{
+                //joada do computador dois
+                int flag = 0;
+                switch(nivelComp2){
+                    case 1:
+                    flag = jogadaFacil(2);
+                    break;
+                    case 2:
+                    flag = jogadaMedia(2);
+                    break;
+                    case 3:
+                    flag = jogadaDificil(2);
+                    break;
+                }
+                if(!flag){
+                    jogadaFacil(2);
+                }
+            }
+                break;
+        }
+
+        printTabela(computador1.cor, computador2.cor);
+        //Pausa no terminal para dar tempo das jogadas
+        //-------------
+        vencedor = analisarTabela();
+
+        if(vencedor){
+            limparLinha(21);
+            
+            switch (vencedor){
+                case 1:
+                    moverCursor(21, 23);
+                    printf("Jogo terminou! Vencedor: ");
+                    mudarEstilo(ESTILO_REVERSO, computador1.cor);
+                    printf("%s\n", computador1.nome);
+                    resetarCor();
+                    break;          
+                case 2:
+                    moverCursor(21, 23);
+                    printf("Jogo terminou! Vencedor: ");
+                    mudarEstilo(ESTILO_REVERSO, computador2.cor);
+                    printf("%s\n", computador2.nome);
+                    resetarCor();
+                    break;
+                case 3:
+                    moverCursor(21, 27);
+                    printf("Jogo terminou em ");
+                    mudarEstilo(ESTILO_REVERSO, ESTILO_NEGRITO);
+                    printf("empate!\n");
+                    resetarCor();
+                    break;
+                }
+
+                //algoritimo que retorna ao menu principal:
+                int aux;
+                printf("\nDeseja voltar para o menu principal? (1.Sim 2.Não): ");
+                while(!(scanf("%d", &aux)) || aux != 1 && aux != 2){
+                    moverCursor(23, 1);
+                    printf("\033[2K"); // codigo ansii para limpar a linha
+                    scanf("%*[^\n]"); // codigo para descartar a linha bugada
+                    printf("Resposta invalida, digite a opção correta (1.Sim 2.Não): ");
+                }
+                return (aux == 1);
+            }
+            
+
+        if(vez == 1){
+            vez=2;
+        }else{
+            vez=1;
+        }
+
+        limparTela();
+    } 
+}
+
 int main(){ //programa principal
     Jogador jogador1;
     Jogador jogador2;
-
-    limparTela();
-
-    int escolha = menuInicial();//chama o menu inicial e salva a escolha do usuario
-
-    limparTela();
-
-    //Uma adaptação melhor do que if, else
-    switch (escolha){
-        case 1:
-            //se o usuario escolheu o modo jogador vs jogador
-
-            modoJogadorJogador();
-            break;
-
-        case 2:
-            //se o usuario escolheu o modo computador vs jogador
-
-            modoComputadorJogador();
-            break;
-    }
+    int flag = 0;
+    do{
+        zerarJogadas();
+        limparTela();
     
-}
+        int escolha = menuInicial();//chama o menu inicial e salva a escolha do usuario
+    
+        limparTela();
+    
+        //Uma adaptação melhor do que if, else
+        switch (escolha){
+            case 1:
+                //se o usuario escolheu o modo jogador vs jogador
+    
+                flag = modoJogadorJogador();
+                break;
+    
+            case 2:
+                //se o usuario escolheu o modo computador vs jogador
+    
+                flag = modoComputadorJogador();
+                break;
+    
+            case 3:
+                //se o usuario escolheu o modo computador vs computador
+    
+                flag = modoComputadorComputador();
+                break;
+            case 4:
+                // Encerrar o jogo:
+                printf("\nFim de jogo!");
+                return 0;
+        }
+        if(flag == 0){
+            limparTela();
+            printf("\nFim de jogo!");
+        }
+        
+    }while (flag);
+
+    } 
+    
