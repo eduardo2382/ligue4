@@ -107,7 +107,14 @@ Jogador jogador(char *tit, int corEscolhida){
         case 4:
             jogador.cor = AZUL;
             break;
-        
+
+        case 5:
+            jogador.cor = MAGENTA;
+            break;
+        case 6:
+            jogador.cor = CIANO;
+            break;
+            
         default:
             break;
     }
